@@ -1,18 +1,25 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\otp_controller;
+use App\Http\Controllers\mailer_controller;
+use App\Http\Controllers\index\registration_patient_controller as RegisterPatient;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index.login');
 });
+
+Route::prefix('registration')->group(function () {
+    Route::get('/', function () {
+        return view('index.registration');
+    });
+    Route::post('/register', [RegisterPatient::class, 'register']);
+    Route::post('/send_otp', [otp_controller::class, 'compose_mail']);
+});
+
+
+Route::get('/get_new_otp', [otp_controller::class, 'generate_new_otp']);
+
+// ===================================================
+Route::get('/send', [mailer_controller::class, 'send']);
