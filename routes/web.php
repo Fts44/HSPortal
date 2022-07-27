@@ -14,7 +14,7 @@ Route::prefix('registration')->group(function () {
     Route::get('/', function () {
         return view('index.registration');
     });
-    Route::post('/register', [RegisterPatient::class, 'register']);
+    Route::post('/register', [RegisterPatient::class, 'store']);
     Route::post('/send_otp', [otp_controller::class, 'compose_mail']);
 });
 
