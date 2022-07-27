@@ -17,15 +17,25 @@
 
             <br>
 
-        	<form class="login-form" method="POST">
-
+        	<form class="login-form" method="POST" action="{{ url('auth_user') }}">
+                @csrf
                 <div class="form-control">
-                    <input type="text" placeholder="Email or SR-Code" name="userid">
+                    <input type="text" placeholder="Email or SR-Code" name="userid" value="{{ old('userid') }}">
+                </div>
+                <div id="userid_error" class="error-message text-danger px-3" style="font-size: 14px;">
+                    @error('userid')
+                        {{ $message }}
+                    @enderror
                 </div>
 
                 <div class="form-control">
-                    <input type="password" placeholder="Password" name="password" id="password">
+                    <input type="password" placeholder="Password" name="pass" id="pass" value="{{ old('pass') }}">
                     <span class="showpassword fa-regular fa-eye-slash"></span>      
+                </div>
+                <div id="pass_error" class="error-message text-danger px-3" style="font-size: 14px;">
+                    @error('pass')
+                        {{ $message }}
+                    @enderror
                 </div>
 
                 <div class="form-control non-input">
@@ -51,7 +61,7 @@
     <script>
         $(document).ready(function(){
             $('.showpassword').click(function(){            
-                let input = $('#password');
+                let input = $('#pass');
                 if(input.attr('type') === 'password'){
                     input.attr('type','text');
                     $('.showpassword').removeClass('fa-eye-slash');

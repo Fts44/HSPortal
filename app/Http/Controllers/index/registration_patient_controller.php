@@ -49,7 +49,8 @@ class registration_patient_controller extends Controller
             if($this->otp_controller->verify_otp($verify_otp_request)){
                 $register_patient_model = new register_patient_model;
                 $register_patient_model->gsuite_email = $request->gsuite_email;
-                $register_patient_model->password = Hash::make($request->password);
+                $register_patient_model->password = Hash::make($request->pass);
+                $register_patient_model->acc_type = 'patient';
                 $register_patient_model->save();
      
                 $response = [

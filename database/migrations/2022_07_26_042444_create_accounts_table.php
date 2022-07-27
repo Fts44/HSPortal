@@ -39,8 +39,9 @@ class CreateAccountsTable extends Migration
             $table->string('dorm_brgy', 150)->nullable();
             $table->string('dorm_mun', 150)->nullable();
             $table->string('dorm_prov', 150)->nullable();
-
-            $table->string('password', 60);
+            $table->string('classification', 20)->nullable();
+            $table->string('acc_type', 20);
+            $table->string('password', 100);
         });
     }
 

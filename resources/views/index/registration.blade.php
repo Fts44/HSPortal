@@ -74,7 +74,7 @@
                 
             </form>
 
-            <p>Already have an account?  Login <a href="/">here</a> <p>
+            <p>Already have an account?  Login <a href="{{ url('/') }}">here</a> <p>
         </div>
 	</section>
 
