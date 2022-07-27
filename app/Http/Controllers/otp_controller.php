@@ -24,11 +24,32 @@ class otp_controller extends Controller
 
     public function compose_mail(Request $request){
 
-        $rules = [
-            'gsuite_email' => ['required','max:255','unique:accounts', new gsuite_rule],     
-        ];
+        if($request->msg_type == 'register'){
+            $rules = [
+                'email' => ['required','unique:accounts,gsuite_email', new gsuite_rule],     
+            ];
+            $message = [];
+        }
+        else{
+            if(str_contains($request->email, '@g.batstate-u.edu.ph')){
+                $rules = [
+                    'email' => ['required','max:255','exists:accounts,gsuite_email'],     
+                ];
+                $message = [
+                    'email.exists' => 'Gsuite email is not registered.'
+                ];
+            }
+            else{
+                $rules = [
+                    'email' => ['required','max:255','email','exists:accounts,email'],     
+                ];
+                $message = [
+                    'email.exists' => 'Email is not registered.'
+                ];
+            }
+        }
 
-        $validator = Validator::make( $request->all(), $rules);
+        $validator = Validator::make( $request->all(), $rules, $message);
 
         if($validator->fails()){
             return response()->json([
@@ -37,7 +58,7 @@ class otp_controller extends Controller
             ]);
         }
         else{
-            $new_otp = $this->generate_new_otp($request->gsuite_email);
+            $new_otp = $this->generate_new_otp($request->email);
             $msg_body = "";
 
             if($request->msg_type == "register"){
@@ -48,7 +69,7 @@ class otp_controller extends Controller
             }
 
             $send_request = new Request([
-                'emailTo' => $request->gsuite_email,
+                'emailTo' => $request->email,
                 'body' => $msg_body,
                 'subject'  => 'One Time Pin - Health Services (ARASOF)'
             ]);

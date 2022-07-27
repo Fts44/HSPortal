@@ -14,16 +14,15 @@ use DB;
 use App\Rules\gsuite_rule;
 use App\Rules\pass_rule;
 
-class registration_patient_controller extends Controller
+class recover_controller extends Controller
 {
     public function __construct(){
         $this->otp_controller = new otp_controller;
     }
-    
-    public function store(Request $request){
-  
+
+    public function update(Request $request){
         $rules = [
-            'email' => ['required','max:255','unique:accounts',new gsuite_rule],
+            'email' => ['required','max:255'],
             'otp' => ['required','numeric','min:4'],
             'pass' => ['required', 'max:20', new pass_rule],
             'cpass' => ['required','same:pass']
@@ -33,6 +32,21 @@ class registration_patient_controller extends Controller
             'cpass.same' => 'Password not match.'
         ];
         
+        if(str_contains($request->email, '@g.batstate-u.edu.ph')){         
+            array_push($rules['email'], 'exists:accounts,gsuite_email');
+            $message = [
+                'email.exists' => 'Gsuite email is not registered.'
+            ];
+            $email_type = "gsuite_email";
+        }
+        else{
+            array_push($rules['email'], 'exists:accounts,email');
+            $message = [
+                'email.exists' => 'Email is not registered.'
+            ];
+            $email_type = "email";
+        }
+
         $validator = Validator::make( $request->all(), $rules, $messages);
 
         if($validator->fails()){
@@ -47,16 +61,13 @@ class registration_patient_controller extends Controller
             ]);
     
             if($this->otp_controller->verify_otp($verify_otp_request)){
-                $data = [
-                    'gsuite_email' => $request->email,
-                    'password' => Hash::make($request->pass),
-                    'acc_type' => 'patient'
-                ];
-                DB::table('accounts')->insert($data);
+                DB::table('accounts')->where($email_type, $request->email)->update([
+                    'password' => Hash::make($request->pass)
+                ]);  
      
                 $response = [
                     'title' => 'Success',
-                    'message' => 'Account created',
+                    'message' => 'Password updated',
                     'icon' => 'success',
                     'status' => 200
                 ];

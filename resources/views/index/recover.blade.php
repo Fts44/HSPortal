@@ -1,7 +1,7 @@
 @extends('layouts.index')
 
 @push('title')
-    <title>Registration</title>
+    <title>Recover</title>
 @endpush
 
 @push('css')
@@ -13,12 +13,12 @@
 		<div class="registration-container">
 			<p class="title">BatStateU - Health Portal</p>
         	<p class="separator"></p>
-        	<p class="welcome-message">Enter your "Gsuite email" and OTP below.</p>
-        	<form class="registration-form" method="POST" action="{{ url('registration/register') }}">
+        	<p class="welcome-message">Enter your "Email" and OTP below.</p>
+        	<form class="registration-form" method="POST" action="{{ url('recover/recover') }}">
                 <div class="form-section">
                     @csrf
                     <div class="form-control">
-                        <input type="text" placeholder="Gsuite email" id="email" name="email"  value="{{ old('email') }}"> 
+                        <input type="text" placeholder="Gsuite or personal email" id="email" name="email"  value="{{ old('email') }}"> 
                     </div>
                     
                     <div id="email_error" class="error-message text-danger px-3" style="font-size: 14px;">
@@ -70,7 +70,7 @@
                     </div> -->
                 </div>
 
-                <button id="btnProceed " class="submit btn btn-secondary" style="float: right;">Register</button>     
+                <button id="btnProceed " class="submit btn btn-secondary" style="float: right;">Recover</button>     
                 
             </form>
 
@@ -114,11 +114,11 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "{{ url('registration/send_otp') }}",
+                    url: "{{ url('recover/send_otp') }}",
                     contentType: 'application/json',
                     data: JSON.stringify({
                         "email": email,
-                        "msg_type": "register",
+                        "msg_type": "recover",
                         "_token": "{{csrf_token()}}",
                     }),
                     success: function(response){
