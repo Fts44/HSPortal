@@ -5,7 +5,7 @@
 @endpush
 
 @push('css')
-    <link rel="stylesheet" href="{{ url('css/registration.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/registration.css') }}">
 @endpush
 
 @section('content')
@@ -43,23 +43,23 @@
                     
 
                     <div class="form-control">
-                        <input type="password" placeholder="Password" id="password" name="password">
+                        <input type="password" placeholder="Password" id="pass" name="pass" value="{{ old('pass') }}">
                         <span class="showpassword fa-regular fa-eye-slash"></span>                               
                     </div>
                     
-                    <div class="error-message text-danger px-3" style="font-size: 14px;">
-                    @error('password')
+                    <div class="error-message text-danger px-3" style="font-size: 14px; width: 450px;">
+                    @error('pass')
                         {{ $message }}
                     @enderror
                     </div>
 
                     <div class="form-control">
-                        <input type="password" placeholder="Confirm New Password" id="cpassword" name="cpassword">   
+                        <input type="password" placeholder="Confirm New Password" id="cpass" name="cpass" value="{{ old('cpass') }}">   
                         <span class="showpassword fa-regular fa-eye-slash"></span>     
                     </div>
                     
                     <div class="error-message text-danger px-3" style="font-size: 14px;">
-                    @error('cpassword')
+                    @error('cpass')
                         {{ $message }}
                     @enderror
                     </div>
@@ -83,9 +83,16 @@
 @push('script')
     <script>
         $(document).ready(function(){
+            @if(session('status'))
+                @php 
+                    $status = json_decode(session('status'));                      
+                @endphp
+                swal('{{$status->title}}','{{$status->message}}','{{$status->icon}}');
+            @endif
+
             $('.showpassword').click(function(){
                 $('.showpassword').toggleClass('fa fa-eye-slash');
-                let input_pass = $('#password, #cpassword');
+                let input_pass = $('#pass, #cpass');
                 if(input_pass.attr('type') === 'password'){
                     input_pass.attr('type','text');
                     $('.showpassword').removeClass('fa-eye-slash');

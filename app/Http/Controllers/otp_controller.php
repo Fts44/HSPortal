@@ -25,7 +25,7 @@ class otp_controller extends Controller
     public function compose_mail(Request $request){
 
         $rules = [
-            'gsuite_email' => ['required','max:255','email','unique:accounts', new gsuite_rule],     
+            'gsuite_email' => ['required','max:255','unique:accounts', new gsuite_rule],     
         ];
 
         $validator = Validator::make( $request->all(), $rules);

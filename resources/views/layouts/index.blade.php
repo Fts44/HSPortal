@@ -20,8 +20,8 @@
 
 
        
-	<section class="side" style="background: url({{ url('images/bg.png') }}) no-repeat; background-size: 100% 100%;">
-		<img src="{{ url('images/logo.png') }}">
+	<section class="side" style="background: url({{ asset('images/bg.png') }}) no-repeat; background-size: 100% 100%;">
+		<img src="{{ asset('images/logo.png') }}">
 	</section>
 
 	@yield('content')
