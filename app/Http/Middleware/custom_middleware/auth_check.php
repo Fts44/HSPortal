@@ -18,7 +18,7 @@ class auth_check
     public function handle(Request $request, Closure $next)
     {
         if(!session()->has('userid_gsuite_email')){
-            return redirect('noaccess');   
+            return redirect('/');   
         }
         
         return $next($request);
