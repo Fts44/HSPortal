@@ -3,8 +3,8 @@
 
 <div class="d-flex align-items-center justify-content-between">
     <a href="#" class="logo d-flex align-items-center">
-        <img src="../../images/logo.png" alt="">
-        <span class="d-none d-lg-block">Health Services Portal</span>
+        <img src="{{ asset('images/logo.png') }}" alt="school_logo">
+        <span class="d-none d-lg-block ms-2">Health Services Portal</span>
     </a>
     <i class="bi bi-list toggle-sidebar-btn" id="hamburgerMenu"></i>
 </div><!-- End Logo -->
@@ -15,7 +15,7 @@
  
         <li class="nav-item dropdown px-3">
 
-            <a class="nav-link nav-logout d-flex align-items-center btn btn-outline-light btn-sm px-3" href="{{ url('logout') }}">
+            <a class="nav-link nav-logout d-flex align-items-center" href="{{ url('logout') }}">
                 <i class="bi bi-power" class="rounded-circle" style="font-size: 1rem;"></i>
                 <span class="d-none d-md-block ps-2">Logout</span>
             </a>

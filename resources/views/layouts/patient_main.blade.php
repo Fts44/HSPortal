@@ -46,24 +46,7 @@
     <script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/rowreorder/1.2.8/js/dataTables.rowReorder.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
-    <script>
 
-        //set datatable
-        const datatable = $('#datatable').DataTable({
-            rowReorder: {
-            selector: 'td:nth-child(2)'
-            },
-            responsive: true,
-            scrollX: true,
-        });
-
-       //if the section change width fixed column by aligning the action col to asc
-        let resize_observer = new ResizeObserver(function() {
-            datatable.order([[ $('#datatable tr th').length-1, 'asc']]).draw();
-        });
-        resize_observer.observe($("#cardTable")[0]);
-
-    </script>
     @stack('script') 
 </body>
 </html>

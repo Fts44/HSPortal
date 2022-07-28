@@ -15,7 +15,7 @@ class CreateAccountsTable extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->string('sr_code', 20)->unique()->nullable();
-            $table->string('gsuite_email', 100)->primary()->unique();
+            $table->string('gsuite_email', 100)->primary();
             $table->string('email', 255)->unique()->nullable();
             $table->string('contact', 20)->unique()->nullable();
 
@@ -28,18 +28,12 @@ class CreateAccountsTable extends Migration
             $table->string('civil_status', 20)->nullable();
             $table->string('religion', 100)->nullable();
 
-            $table->string('home_brgy', 150)->nullable();
-            $table->string('home_mun', 150)->nullable();
-            $table->string('home_prov', 150)->nullable();
-
-            $table->string('birth_brgy', 150)->nullable();
-            $table->string('birth_mun', 150)->nullable();
-            $table->string('birth_prov', 150)->nullable();
-
-            $table->string('dorm_brgy', 150)->nullable();
-            $table->string('dorm_mun', 150)->nullable();
-            $table->string('dorm_prov', 150)->nullable();
+            $table->string('home_address_id', 10)->nullable()->unique();
+            $table->string('birth_address_id', 10)->nullable()->unique();
+            $table->string('dorm_adress_id', 10)->nullable()->unique();
+           
             $table->string('classification', 20)->nullable();
+            $table->string('profile_pic', 255)->nullable();
             $table->string('acc_type', 20);
             $table->string('password', 100);
         });
