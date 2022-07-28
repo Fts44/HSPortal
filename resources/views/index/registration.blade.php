@@ -13,7 +13,7 @@
 		<div class="registration-container">
 			<p class="title">BatStateU - Health Portal</p>
         	<p class="separator"></p>
-        	<p class="welcome-message">Enter your "Gsuite email" and OTP below.</p>
+        	<p class="welcome-message">To register enter your "Gsuite email" and OTP below.</p>
         	<form class="registration-form" method="POST" action="{{ url('registration/register') }}">
                 <div class="form-section">
                     @csrf
