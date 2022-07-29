@@ -28,11 +28,23 @@ class CreateAccountsTable extends Migration
             $table->string('civil_status', 20)->nullable();
             $table->string('religion', 100)->nullable();
 
-            $table->string('home_address_id', 10)->nullable()->unique();
-            $table->string('birth_address_id', 10)->nullable()->unique();
-            $table->string('dorm_adress_id', 10)->nullable()->unique();
+            $table->string('home_prov', 50)->nullable();
+            $table->string('home_mun', 50)->nullable();
+            $table->string('home_brgy', 50)->nullable();
+
+            $table->string('birth_prov', 50)->nullable();
+            $table->string('birth_mun', 50)->nullable();
+            $table->string('birth_brgy', 50)->nullable();
+
+            $table->string('dorm_prov', 50)->nullable();
+            $table->string('dorm_mun', 50)->nullable();
+            $table->string('dorm_brgy', 50)->nullable();
            
             $table->string('classification', 20)->nullable();
+            $table->string('grade_level', 20)->nullable();
+            $table->string('department', 20)->nullable();
+            $table->string('program', 20)->nullable();
+            $table->string('emergency_contact_id', 20)->nullable()->unique();
             $table->string('profile_pic', 255)->nullable();
             $table->string('acc_type', 20);
             $table->string('password', 100);

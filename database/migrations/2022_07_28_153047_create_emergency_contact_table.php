@@ -14,15 +14,19 @@ class CreateEmergencyContactTable extends Migration
     public function up()
     {
         Schema::create('emergency_contact', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('emerg_fn',50);
-            $table->string('emerg_mn',50);
-            $table->string('emerg_ln',50);
-            $table->string('relation_to_patient',50);
+            $table->id();
+            $table->string('first_name',50);
+            $table->string('middle_name',50);
+            $table->string('last_name',50);
+            $table->string('relation',50);
             $table->string('landline',50);
             $table->string('contact',50);
-            $table->string('biz_address',10)->unique();
+            $table->string('biz_prov', 50);
+            $table->string('biz_mun', 50);
+            $table->string('biz_brgy', 50);
         });
+
+        return redirect()->back()->withInput($request->all());
     }
 
     /**

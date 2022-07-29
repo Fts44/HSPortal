@@ -36,7 +36,7 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" id="sidebar_dashboard">
                     <i class="bi bi-person"></i>
-                    <span>Personal Info</span>
+                    <span>Profile</span>
                 </a>
             </li>
         </li>

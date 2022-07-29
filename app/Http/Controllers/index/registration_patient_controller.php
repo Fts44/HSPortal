@@ -23,7 +23,7 @@ class registration_patient_controller extends Controller
     public function store(Request $request){
   
         $rules = [
-            'email' => ['required','max:255','unique:accounts',new gsuite_rule],
+            'email' => ['required','unique:accounts',new gsuite_rule],
             'otp' => ['required','numeric','min:4'],
             'pass' => ['required', 'max:20', new pass_rule],
             'cpass' => ['required','same:pass']

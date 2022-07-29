@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\patient;
+namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class profile_controller extends Controller
+use DB;
+
+class admin_patient_controller extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +16,9 @@ class profile_controller extends Controller
      */
     public function index()
     {
+        $patients = DB::table('accounts')->where('acc_type','=','admin')->get();
 
+        return view('admin.patient', compact('patients'));
     }
 
     /**
@@ -46,7 +50,7 @@ class profile_controller extends Controller
      */
     public function show($id)
     {
-        
+        //
     }
 
     /**
