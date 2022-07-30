@@ -25,15 +25,15 @@
                         <ul class="nav nav-tabs nav-tabs-bordered">
 
                             <li class="nav-item">
-                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Profile</button>
+                                <button class="nav-link {{($active_page=='profile')?'active':''}}" data-bs-toggle="tab" data-bs-target="#profile-edit">Profile</button>
                             </li>
 
                             <li class="nav-item">
-                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-emergency-contact">Emergency Contact</button>
+                                <button class="nav-link {{($active_page=='emergency_contact')?'active':''}}" data-bs-toggle="tab" data-bs-target="#profile-emergency-contact">Emergency Contact</button>
                             </li>
 
                             <li class="nav-item">
-                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Password</button>
+                                <button class="nav-link {{($active_page=='password')?'active':''}}" data-bs-toggle="tab" data-bs-target="#profile-change-password">Password</button>
                             </li>
 
                         </ul>
@@ -41,7 +41,7 @@
                         <!-- Profile Edit Form -->
                         <div class="tab-content pt-2">
 
-                            <div class="tab-pane fade p-3" id="profile-edit">
+                            <div class="tab-pane fade p-3  {{($active_page=='profile')?'active show':''}}" id="profile-edit">
 
                                 <form method="POST" action="{{ url('patient/updatemyprofile/'.session()->get('userid_gsuite_email')) }}">
                                    
@@ -50,30 +50,50 @@
                                     <div class="row mb-3">
                                         <label class="col-lg-12 col-form-label d-flex justify-content-center" for="profile_pic">Profile Picture</label>
                                         <div class="col-lg-12 mt-1 d-flex justify-content-center">
-                                            <img class="rounded-circle border border-secondary p-2" src="{{ asset('images/cat.jpg') }}" alt="test" style="height: 200px; width: 200px;">
+                                            <img class="form-control p-2" src="{{ asset('images/cat.jpg') }}" alt="test" style="height: 200px; width: 200px;">
                                         </div>
                                         <div class="col-lg-12 mt-3 d-flex justify-content-center">
-                                            <input class="w-25 form-control" type="file" name="" id="">
+                                            <input class="w-50 form-control" type="file" name="" id="" accept=".jpg,.png">
                                         </div>
                                     </div>
 
                                     <div class="row mb-3">  
-                                        <div class="col-lg-5">
+                                        <div class="col-lg-6">
                                             <label class="col-lg-12 col-form-label" for="gsuite_email">Gsuite Email</label>
                                             <div class="col-lg-12 mt-1">
                                                 <input name="gsuite_email" id="gsuite_email" type="text" class="form-control" placeholder="abc@g.batstate-u.edu.ph">
                                             </div>
                                             <span class="text-danger"></span>
                                         </div>
+                                        <div class="col-lg-6">
+                                            <div class="row">
+                                                <label for="otp" class="col-lg-12 col-form-label ">One Time Pin</label>
+                                                <div class="col-lg-12">
+                                                    <div class="row">
+                                                        <div class="col-lg-8 mt-1">
+                                                            <input type="text" class="form-control" placeholder="OTP" name="otp" id="otp">
+                                                        </div>
+                                                        <div class="col-lg-4 mt-1">
+                                                            <a class="btn btn-secondary" style="width: 100%;">Get OTP</a>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
                                         
-                                        <div class="col-lg-5">
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-lg-8">
                                             <label class="col-lg-12 col-form-label" for="email">Personal Email</label>
                                             <div class="col-lg-12 mt-1">
                                                 <input name="email" id="email" type="text" class="form-control"  placeholder="abc@example.com">
                                             </div>
                                         </div>   
                                         
-                                        <div class="col-lg-2">
+                                        <div class="col-lg-4">
                                             <label class="col-lg-12 col-form-label" for="sr_code">SR-Code:</label>
                                             <div class="col-lg-12 mt-1">
                                                 <input name="sr_code" id="sr_code" type="text" class="form-control" placeholder="12-34567">
@@ -245,7 +265,7 @@
                             <!-- End Profile Edit Form -->
 
                             <!-- emergency contact form -->
-                            <div class="tab-pane fade p-3 active show" id="profile-emergency-contact">
+                            <div class="tab-pane fade p-3 {{($active_page=='emergency_contact')?'active show':''}}" id="profile-emergency-contact">
 
                                 <form method="POST" action="{{ url('patient/updatemyemergencycontact/'.session()->get('userid_gsuite_email')) }}">
                                     
@@ -317,7 +337,7 @@
                             <!-- emergency contact form -->
 
                             <!-- Change Password Form -->
-                            <div class="tab-pane fade p-3" id="profile-change-password">
+                            <div class="tab-pane fade p-3  {{($active_page=='passowrd')?'active show':''}}" id="profile-change-password">
                                
                                 <form method="POST" action="">
 

@@ -8,6 +8,8 @@ use App\Http\Controllers\index\registration_controller as Register;
 use App\Http\Controllers\index\login_controller as Login;
 use App\Http\Controllers\index\recover_controller as Recover;
 
+use App\Http\Controllers\main\profile_controller as Profile;
+
 Route::get('/logout', [Login::class, 'logout']);
 
 Route::get('noaccess', function(){
@@ -36,8 +38,8 @@ Route::middleware('already_login')->group(function(){
 Route::middleware('auth_check')->group(function(){
 
     Route::prefix('patient')->group(function(){
-        Route::view('/', 'patient.profile');
-        //Route::get('/', [Profile::class, 'index']);
+        //Route::view('/', 'patient.profile');
+        Route::get('/', [Profile::class, 'index']);
         Route::post('/updatemyprofile/{id}', [Profile::class, 'update']);
         Route::post('/updatemyemergencycontact/{id}', [Emergency::class, 'update']);
     });
