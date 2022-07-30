@@ -25,8 +25,6 @@ class CreateEmergencyContactTable extends Migration
             $table->string('biz_mun', 50);
             $table->string('biz_brgy', 50);
         });
-
-        return redirect()->back()->withInput($request->all());
     }
 
     /**

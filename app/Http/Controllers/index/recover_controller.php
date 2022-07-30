@@ -77,8 +77,8 @@ class recover_controller extends Controller
             else{
     
                 $response = [
-                    'title' => 'Error',
-                    'message' => 'Invalid otp, Please double check the email!',
+                    'title' => 'Invalid otp',
+                    'message' => 'Please double check the email or get new one!',
                     'icon' => 'error',
                     'status' => 400
                 ];

@@ -25,31 +25,47 @@ class otp_controller extends Controller
     public function compose_mail(Request $request){
 
         if($request->msg_type == 'register'){
-            $rules = [
-                'email' => ['required','unique:accounts,gsuite_email', new gsuite_rule],     
-            ];
-            $message = [];
+            
+            if(str_contains($request->email,'@g.batstate-u.edu.ph')){
+                $rules = [
+                    'email' => ['required','unique:accounts,gsuite_email'],     
+                ];
+                $message = [
+                    'email.unique' => 'Gsuite email already registered.'
+                ];
+            }   
+            else{
+                $rules = [
+                    'email' => ['required','unique:accounts,email'],     
+                ];
+                $message = [
+                    'email.unique' => 'Email already registered.'
+                ];
+            }
+
         }
         else{
-            if(str_contains($request->email, '@g.batstate-u.edu.ph')){
+
+            if(str_contains($request->email,'@g.batstate-u.edu.ph')){
                 $rules = [
-                    'email' => ['required','max:255','exists:accounts,gsuite_email'],     
+                    'email' => ['required','exists:accounts,gsuite_email'],     
                 ];
                 $message = [
                     'email.exists' => 'Gsuite email is not registered.'
                 ];
-            }
+            }   
             else{
                 $rules = [
-                    'email' => ['required','max:255','email','exists:accounts,email'],     
+                    'email' => ['required','exists:accounts,email'],     
                 ];
                 $message = [
                     'email.exists' => 'Email is not registered.'
                 ];
             }
+
         }
 
-        $validator = Validator::make( $request->all(), $rules, $message);
+        $validator = Validator::make($request->all(), $rules, $message);
 
         if($validator->fails()){
             return response()->json([

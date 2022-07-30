@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Carbon\Carbon;
 
 class CreateAccountsTable extends Migration
 {
@@ -15,7 +16,7 @@ class CreateAccountsTable extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->string('sr_code', 20)->unique()->nullable();
-            $table->string('gsuite_email', 100)->primary();
+            $table->string('gsuite_email', 100)->unique()->nullable();
             $table->string('email', 255)->unique()->nullable();
             $table->string('contact', 20)->unique()->nullable();
 
@@ -41,13 +42,15 @@ class CreateAccountsTable extends Migration
             $table->string('dorm_brgy', 50)->nullable();
            
             $table->string('classification', 20)->nullable();
+            $table->string('position', 20)->nullable();
             $table->string('grade_level', 20)->nullable();
             $table->string('department', 20)->nullable();
             $table->string('program', 20)->nullable();
             $table->string('emergency_contact_id', 20)->nullable()->unique();
             $table->string('profile_pic', 255)->nullable();
-            $table->string('acc_type', 20);
             $table->string('password', 100);
+            $table->boolean('is_verified')->default(0);
+            $table->dateTime('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 

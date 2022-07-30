@@ -17,7 +17,7 @@
     }
 
     body {
-        /*border: solid green;*/
+        overflow-x: hidden;
         height: 100vh;
         width: 100vw;
         display: grid;
@@ -85,22 +85,10 @@
         border: none;
         background-color: transparent;
         justify-content: space-around;
-        /*border: solid;*/
     }
 
-    input, button {
-        border: none;
-        outline: none;
-        font-size: 14px;
-    }
-
-    input {
-        border-radius: 5px;
-        width: 100%;
-        background: #e6e6e6;
-        color: #333;
-        letter-spacing: 0.5px;
-        padding: 10px 20px;
+    .registration-container .registration-form .form-control .field {
+        height: 35px;
     }
 
     input ~ .showpassword {
@@ -110,15 +98,7 @@
         transform: translateY(-50%);
         color: #888;
         transition: color   0.4s;
-    }
-
-    input.showPassword {
-        width: auto;
-        margin-left: 20px;
-    }
-
-    input.showPassword ~ label{
-        margin-left: 8px;
+        cursor: pointer;
     }
 
     a.forgotPassword{
@@ -149,15 +129,10 @@
       color: #666666;
     }
     
-    #otp{
-        width: 73%;
-    }
     #btn_otp{
-        width: 25%;
+        width: 100%;
         border-radius: 10px;
         color: #fff;
-        padding: 10px;
-        font-size: 14px;
         background-color: #5a5c69;
         cursor: pointer;
         transition: opacity 0.4s;

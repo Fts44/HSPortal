@@ -13,12 +13,12 @@
 		<div class="registration-container">
 			<p class="title">BatStateU - Health Portal</p>
         	<p class="separator"></p>
-        	<p class="welcome-message">To recover account enter your "Email" and OTP below.</p>
+        	<p class="welcome-message">To recover account enter your email and otp below.</p>
         	<form class="registration-form" method="POST" action="{{ url('recover/recover') }}">
                 <div class="form-section">
                     @csrf
                     <div class="form-control">
-                        <input type="text" placeholder="Gsuite or personal email" id="email" name="email"  value="{{ old('email') }}"> 
+                        <input class="form-control border field" type="text" placeholder="Gsuite or personal email" id="email" name="email"  value="{{ old('email') }}"> 
                     </div>
                     
                     <div id="email_error" class="error-message text-danger px-3" style="font-size: 14px;">
@@ -28,11 +28,20 @@
                     </div>
 
                     <div class="form-control">
-                        <input type="number" placeholder="One Time Pin" id="otp" name="otp"  value="{{ old('otp') }}">
-                        <button id="btn_otp" class="btn btn-secondary">
-                            <i class="lbl_loading fa-solid fa-spinner d-none"></i>
-                            <span id="btn_otp_lbl">Send</span>
-                        </button>          
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-lg-8 pe-0" style="width: 70%;">
+                                    <input class="form-control border field" type="number" placeholder="One Time Pin" id="otp" name="otp"  value="{{ old('otp') }}">
+                                </div>
+                                
+                                <div class="col-lg-4 ps-1" style="width: 30%;">
+                                    <button id="btn_otp" class="btn btn-secondary">
+                                        <i class="lbl_loading fa-solid fa-spinner d-none" style="font-size: 14px;"></i>
+                                        <span id="btn_otp_lbl">Send</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>            
                     </div>
                     
                     <div class="error-message text-danger px-3" style="font-size: 14px;">
@@ -43,7 +52,7 @@
                     
 
                     <div class="form-control">
-                        <input type="password" placeholder="Password" id="pass" name="pass" value="{{ old('pass') }}">
+                        <input class="form-control border field" type="password" placeholder="Password" id="pass" name="pass" value="{{ old('pass') }}">
                         <span class="showpassword fa-regular fa-eye-slash"></span>                               
                     </div>
                     
@@ -54,7 +63,7 @@
                     </div>
 
                     <div class="form-control">
-                        <input type="password" placeholder="Confirm New Password" id="cpass" name="cpass" value="{{ old('cpass') }}">   
+                        <input class="form-control border field" type="password" placeholder="Confirm New Password" id="cpass" name="cpass" value="{{ old('cpass') }}">   
                         <span class="showpassword fa-regular fa-eye-slash"></span>     
                     </div>
                     

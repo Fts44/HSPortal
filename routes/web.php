@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\otp_controller;
 use App\Http\Controllers\mailer_controller;
 
-use App\Http\Controllers\index\registration_patient_controller as RegisterPatient;
+use App\Http\Controllers\index\registration_controller as Register;
 use App\Http\Controllers\index\login_controller as Login;
 use App\Http\Controllers\index\recover_controller as Recover;
 
@@ -27,10 +27,11 @@ Route::middleware('already_login')->group(function(){
 
     Route::prefix('registration')->group(function () {
         Route::view('/','index.registration');
-        Route::post('register', [RegisterPatient::class, 'store']);
+        Route::post('register', [Register::class, 'store']);
         Route::post('send_otp', [otp_controller::class, 'compose_mail']);
     });
 });
+
 //=======================main=========================
 Route::middleware('auth_check')->group(function(){
 
@@ -41,8 +42,8 @@ Route::middleware('auth_check')->group(function(){
         Route::post('/updatemyemergencycontact/{id}', [Emergency::class, 'update']);
     });
 
-    // Route::prefix('admin')->group(function(){
-    //     Route::get('/',[AdminPatient::class, 'index']);
-    // });
+    Route::prefix('admin')->group(function(){
+        Route::get('/',[AdminPatient::class, 'index']);
+    });
 });
 
