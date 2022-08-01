@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use session;
 
-class auth_check
+class is_admin
 {
     /**
      * Handle an incoming request.
@@ -17,11 +17,11 @@ class auth_check
      */
     public function handle(Request $request, Closure $next)
     {
-        if(!session()->has('user_type')){
-            return redirect('/');   
+        if(Session()->get('user_type') != 'admin'){
+            return response()->view('noaccess');
         }
-        
-        return $next($request);
-     
+        else{
+            return $next($request);
+        }
     }
 }

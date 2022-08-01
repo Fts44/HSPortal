@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\main;
+namespace App\Http\Controllers\patient;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
-use Session;
 
 class profile_controller extends Controller
 {
@@ -20,6 +18,6 @@ class profile_controller extends Controller
     public function index(){
         $active_page = 'profile';
 
-        return view(Session()->get('user_type').".profile")->with(compact('active_page'));
+        return view("patient.profile")->with(compact('active_page'));
     }
 }

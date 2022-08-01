@@ -16,7 +16,7 @@
             <li class="nav-item dropdown px-3">
 
                 <a class="nav-link nav-logout d-flex align-items-center" href="{{ url('logout') }}">
-                    <i class="bi bi-power" class="rounded-circle" style="font-size: 1rem;"></i>
+                    <i class="bi bi-power" style="font-size: 1rem;"></i>
                     <span class="d-none d-md-block ps-2">Logout</span>
                 </a>
                 

@@ -1,7 +1,7 @@
-@extends('layouts.patient_main')
+@extends('layouts.admin_main')
 
 @push('title')
-    <title>Patient Profile</title>
+    <title>Admin Profile</title>
 @endpush
 
 
@@ -12,7 +12,9 @@
         <h1>Personal Info</h1>
     </div>
     <!-- End Page Title -->
-
+    @php
+        $active_page = 'profile'
+    @endphp
     <section class="section profile">
         <div class="row">
 

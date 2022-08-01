@@ -17,14 +17,11 @@ class is_patient
      */
     public function handle(Request $request, Closure $next)
     {
-        if(!Session()->has('user_type')){
-            return view('noaccess');
+        if(Session()->get('user_type') != 'patient'){
+            return response()->view('noaccess');
         }
-
-        if(!session()::get('user_type') == 'patient'){
-            return view('noaccess');
+        else{
+            return $next($request);
         }
-
-        return $next($request);
     }
 }

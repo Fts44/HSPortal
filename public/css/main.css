@@ -267,7 +267,7 @@
  .accordion-item {
    border: 1px solid #ebeef4;
  }
- 
+
  .accordion-button:focus {
    outline: 0;
    box-shadow: none;
@@ -452,7 +452,6 @@
  .header-nav .nav-logout {
   border-radius: 30px;
   color: #012970;
-  border: solid #b4c4e6a6;
   border-width: thin;
 }
  .header-nav .nav-logout span {

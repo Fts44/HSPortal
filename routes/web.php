@@ -8,7 +8,7 @@ use App\Http\Controllers\index\registration_controller as Register;
 use App\Http\Controllers\index\login_controller as Login;
 use App\Http\Controllers\index\recover_controller as Recover;
 
-use App\Http\Controllers\main\profile_controller as Profile;
+use App\Http\Controllers\patient\profile_controller as PatientProfile;
 
 Route::get('/logout', [Login::class, 'logout']);
 
@@ -39,13 +39,72 @@ Route::middleware('auth_check')->group(function(){
 
     Route::prefix('patient')->group(function(){
         //Route::view('/', 'patient.profile');
-        Route::get('/', [Profile::class, 'index']);
-        Route::post('/updatemyprofile/{id}', [Profile::class, 'update']);
-        Route::post('/updatemyemergencycontact/{id}', [Emergency::class, 'update']);
+        // middleware('is_patient')->
+        Route::prefix('/')->group(function(){
+            Route::get('/', [PatientProfile::class, 'index']);
+            Route::post('/updatemyprofile/{id}', [PatientProfile::class, 'update']);
+            Route::post('/updatemyemergencycontact/{id}', [Emergency::class, 'update']);
+        });
+
+        Route::prefix('/documents')->group(function(){
+            Route::view('/','patient.documents');
+        });
+
+        Route::prefix('/appointment')->group(function(){
+            Route::view('/','patient.appointment');
+
+            Route::prefix('/request')->group(function(){
+                Route::view('/','patient.appointmentRequest');
+            });
+        });
+
+        Route::prefix('/message')->group(function(){
+            Route::view('/','patient.message');
+        });
+
+        Route::prefix('/dashboard')->group(function(){
+            Route::view('/','patient.dashboard');
+        });
+
     });
 
     Route::prefix('admin')->group(function(){
-        Route::get('/',[AdminPatient::class, 'index']);
+        // middleware('is_admin')->
+        Route::prefix('/')->group(function(){
+            Route::view('/','admin.profile');
+        });
+
+        Route::prefix('/infirmarypersonnel')->group(function(){
+            Route::view('/','admin.profilepersonnel');
+        });
+
+        Route::prefix('/patient')->group(function(){
+            Route::view('/','admin.profilepatient');
+
+            Route::prefix('/records')->group(function(){
+                Route::view('/','admin.records');
+            });
+        });
+
+        Route::prefix('/inventory/medication')->group(function(){
+            Route::view('/','admin.inventoryMedication');
+        });
+
+        Route::prefix('/appointment')->group(function(){
+            Route::view('/','admin.appointment');
+        });
+
+        Route::prefix('/dashboard')->group(function(){
+            Route::view('/','admin.dashboard');
+        });
+    });
+
+    Route::prefix('nurse')->group(function(){
+
+    });
+
+    Route::prefix('doctor')->group(function(){
+
     });
 });
 

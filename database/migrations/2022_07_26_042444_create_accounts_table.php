@@ -15,6 +15,7 @@ class CreateAccountsTable extends Migration
     public function up()
     {
         Schema::create('accounts', function (Blueprint $table) {
+            $table->id();
             $table->string('sr_code', 20)->unique()->nullable();
             $table->string('gsuite_email', 100)->unique()->nullable();
             $table->string('email', 255)->unique()->nullable();
