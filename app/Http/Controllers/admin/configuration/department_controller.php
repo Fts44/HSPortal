@@ -26,7 +26,7 @@ class department_controller extends Controller
     {
         $validator = Validator::make($request->all(),[
             'grade_level' => 'required|exists:grade_level,gl_id',
-            'code' => 'required|unique:department,dept_code,'.$request->department.',gl_id,'.$request->grade_level,
+            'code' => 'required|unique:department,dept_code',
             'name' => 'required|unique:department,dept_name'
         ]);
 
