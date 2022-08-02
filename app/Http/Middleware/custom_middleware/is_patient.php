@@ -18,10 +18,9 @@ class is_patient
     public function handle(Request $request, Closure $next)
     {
         if(Session()->get('user_type') != 'patient'){
+            
             return response()->view('noaccess');
         }
-        else{
-            return $next($request);
-        }
+        return $next($request);
     }
 }

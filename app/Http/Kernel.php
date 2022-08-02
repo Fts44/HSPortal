@@ -56,7 +56,7 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'auth_check' => \App\Http\Middleware\custom_middleware\auth_check::class,
         'is_patient' => \App\Http\Middleware\custom_middleware\is_patient::class,
-        'is_admin' => \App\Http\Middleware\custom_middleware\is_patient::class,
+        'is_admin' => \App\Http\Middleware\custom_middleware\is_admin::class,
         'already_login' => \App\Http\Middleware\custom_middleware\already_login::class,
 
         'auth' => \App\Http\Middleware\Authenticate::class,

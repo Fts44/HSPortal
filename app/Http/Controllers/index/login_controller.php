@@ -36,7 +36,7 @@ class login_controller extends Controller
 
             if($user){
                 if(Hash::check($request->pass, $user->password)){
-                    $request->session()->put('userid_gsuite_email', $user->gsuite_email);
+                    $request->session()->put('user_id', $user->id);
                     $request->session()->put('user_type', $user->position);
                     return redirect($user->position);
                 }

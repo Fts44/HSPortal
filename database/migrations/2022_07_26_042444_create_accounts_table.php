@@ -30,18 +30,10 @@ class CreateAccountsTable extends Migration
             $table->string('civil_status', 20)->nullable();
             $table->string('religion', 100)->nullable();
 
-            $table->string('home_prov', 50)->nullable();
-            $table->string('home_mun', 50)->nullable();
-            $table->string('home_brgy', 50)->nullable();
+            $table->integer('home_address_id')->nullable();
+            $table->integer('birth_address_id')->nullable();
+            $table->integer('dorm_address_id')->nullable();
 
-            $table->string('birth_prov', 50)->nullable();
-            $table->string('birth_mun', 50)->nullable();
-            $table->string('birth_brgy', 50)->nullable();
-
-            $table->string('dorm_prov', 50)->nullable();
-            $table->string('dorm_mun', 50)->nullable();
-            $table->string('dorm_brgy', 50)->nullable();
-           
             $table->string('classification', 20)->nullable();
             $table->string('position', 20)->nullable();
             $table->string('grade_level', 20)->nullable();
@@ -52,6 +44,19 @@ class CreateAccountsTable extends Migration
             $table->string('password', 100);
             $table->boolean('is_verified')->default(0);
             $table->dateTime('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            
+            // $table->string('home_prov', 50)->nullable();
+            // $table->string('home_mun', 50)->nullable();
+            // $table->string('home_brgy', 50)->nullable();
+
+            // $table->string('birth_prov', 50)->nullable();
+            // $table->string('birth_mun', 50)->nullable();
+            // $table->string('birth_brgy', 50)->nullable();
+
+            // $table->string('dorm_prov', 50)->nullable();
+            // $table->string('dorm_mun', 50)->nullable();
+            // $table->string('dorm_brgy', 50)->nullable();
+
         });
     }
 

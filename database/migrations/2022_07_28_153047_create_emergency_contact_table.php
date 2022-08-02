@@ -21,9 +21,10 @@ class CreateEmergencyContactTable extends Migration
             $table->string('relation',50);
             $table->string('landline',50);
             $table->string('contact',50);
-            $table->string('biz_prov', 50);
-            $table->string('biz_mun', 50);
-            $table->string('biz_brgy', 50);
+            $table->integer('biz_address_id');
+            // $table->string('biz_prov', 50);
+            // $table->string('biz_mun', 50);
+            // $table->string('biz_brgy', 50);
         });
     }
 

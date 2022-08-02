@@ -16,7 +16,7 @@ class already_login
      */
     public function handle(Request $request, Closure $next)
     {
-        if(session()->has('userid_gsuite_email') && session()->has('user_type')){
+        if(session()->has('user_id') && session()->has('user_type')){
             return redirect(session()->get('user_type'));
         }
         return $next($request);

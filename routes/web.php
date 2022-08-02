@@ -10,6 +10,9 @@ use App\Http\Controllers\index\recover_controller as Recover;
 
 use App\Http\Controllers\patient\profile_controller as PatientProfile;
 
+use App\Http\Controllers\admin\configuration\grade_level_controller as GradeLevel;
+use App\Http\Controllers\admin\configuration\department_controller as Department;
+
 Route::get('/logout', [Login::class, 'logout']);
 
 Route::get('noaccess', function(){
@@ -37,9 +40,8 @@ Route::middleware('already_login')->group(function(){
 //=======================main=========================
 Route::middleware('auth_check')->group(function(){
 
-    Route::prefix('patient')->group(function(){
-        //Route::view('/', 'patient.profile');
-        // middleware('is_patient')->
+    Route::prefix('patient')->middleware('is_patient')->group(function(){
+
         Route::prefix('/')->group(function(){
             Route::get('/', [PatientProfile::class, 'index']);
             Route::post('/updatemyprofile/{id}', [PatientProfile::class, 'update']);
@@ -68,8 +70,7 @@ Route::middleware('auth_check')->group(function(){
 
     });
 
-    Route::prefix('admin')->group(function(){
-        // middleware('is_admin')->
+    Route::prefix('admin')->middleware('is_admin')->group(function(){
         Route::prefix('/')->group(function(){
             Route::view('/','admin.profile');
         });
@@ -96,6 +97,22 @@ Route::middleware('auth_check')->group(function(){
 
         Route::prefix('/dashboard')->group(function(){
             Route::view('/','admin.dashboard');
+        });
+
+
+        Route::prefix('/configuration')->group(function(){
+
+            Route::prefix('/gradelevel')->group(function(){
+                Route::get('/', [GradeLevel::class, 'index']);
+                Route::post('/new', [GradeLevel::class, 'store']);
+                Route::get('/delete/{id}', [GradeLevel::class, 'destroy']);
+                Route::post('/update/{id}', [GradeLevel::class, 'update']);
+            });
+            
+            Route::prefix('/department')->group(function(){
+                Route::get('/', [Department::class, 'index']);
+                Route::post('/new', [Department::class, 'store']);
+            });
         });
     });
 

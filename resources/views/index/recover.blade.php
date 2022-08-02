@@ -35,10 +35,10 @@
                                 </div>
                                 
                                 <div class="col-lg-4 ps-1" style="width: 30%;">
-                                    <button id="btn_otp" class="btn btn-secondary">
+                                    <a id="btn_otp" class="btn btn-secondary">
                                         <i class="lbl_loading fa-solid fa-spinner d-none" style="font-size: 14px;"></i>
                                         <span id="btn_otp_lbl">Send</span>
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>            

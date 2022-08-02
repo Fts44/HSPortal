@@ -20,8 +20,7 @@ class is_admin
         if(Session()->get('user_type') != 'admin'){
             return response()->view('noaccess');
         }
-        else{
-            return $next($request);
-        }
+        
+        return $next($request);
     }
 }
