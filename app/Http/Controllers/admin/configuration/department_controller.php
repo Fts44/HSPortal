@@ -8,19 +8,26 @@ use Illuminate\Support\Facades\Validator;
 
 use DB;
 
-class grade_level_controller extends Controller
+class department_controller extends Controller
 {
     public function index()
     {
         $grade_levels = DB::table('grade_level')->get();
 
-        return view('admin.configuration.education.grade_level')->with(compact('grade_levels'));
+        $departments = DB::table('department')
+            ->join('grade_level', 'department.gl_id', '=', 'grade_level.gl_id')
+            ->get();
+
+        // echo json_encode($departments);
+        return view('admin.configuration.education.department')->with(compact('grade_levels', 'departments'));
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'name' => 'required|unique:grade_level,gl_name'
+            'grade_level' => 'required|exists:grade_level,gl_id',
+            'code' => 'required|unique:department,dept_code',
+            'name' => 'required|unique:department,dept_name'
         ]);
 
         if($validator->fails()){
@@ -31,13 +38,15 @@ class grade_level_controller extends Controller
         }
         else{
             try {
-                $grade_level = DB::table('grade_level')->insert([
-                    'gl_name' => $request->name
+                $grade_level = DB::table('department')->insert([
+                    'gl_id' => $request->grade_level,
+                    'dept_code' => $request->code,
+                    'dept_name' => $request->name,
                 ]);
-                $message = 'Grade level inserted!';
+                $message = 'Department inserted!';
                 return redirect()->back()->with('success', $message);
             }catch (Exception $e) {
-                $message = 'Grade level not inserted! Try again later!';
+                $message = 'Department not inserted! Try again later!';
                 return redirect()->back()->with('failed', $message);
             }
         }
@@ -47,24 +56,28 @@ class grade_level_controller extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'name' => 'required|unique:grade_level,gl_name,'.$id.',gl_id'
+            'grade_level' => 'required|exists:grade_level,gl_id',
+            'code' => 'required|unique:department,dept_code,'.$id.',dept_id',
+            'name' => 'required|unique:department,dept_name,'.$id.',dept_id'
         ]);
 
         if($validator->fails()){
-            echo json_encode($request->name);
+            //echo json_encode($request->name);
             $url = $request->url();
             $action = 'update';
             return redirect()->back()->withErrors($validator)->withInput($request->all())->with(compact('url', 'action'));  
         }
         else{
             try {
-                $grade_level = DB::table('grade_level')->where('gl_id', $id)->update([
-                    'gl_name' => $request->name
+                $query = DB::table('department')->where('dept_id', $id)->update([
+                    'gl_id' => $request->grade_level,
+                    'dept_code' => $request->code,
+                    'dept_name' => $request->name,
                 ]);
-                $message = 'Grade level updated!';
+                $message = 'Department updated!';
                 return redirect()->back()->with('success', $message);
             }catch (Exception $e) {
-                $message = 'Grade level not updated! Try again later!';
+                $message = 'Department not updated! Try again later!';
                 return redirect()->back()->with('failed', $message);
             }
         }
@@ -74,10 +87,10 @@ class grade_level_controller extends Controller
     {
         try {
             $grade_level = DB::table('grade_level')->where('gl_id', $id)->delete();
-            $message = 'Grade level deleted!';
+            $message = 'Department deleted!';
             return redirect()->back()->with('success', $message);
         }catch (Exception $e) {
-            $message = 'Grade level not deleted! Try again later!';
+            $message = 'Department not deleted! Try again later!';
             return redirect()->back()->with('failed', $message);
         }
     }

@@ -12,6 +12,7 @@ use App\Http\Controllers\patient\profile_controller as PatientProfile;
 
 use App\Http\Controllers\admin\configuration\grade_level_controller as GradeLevel;
 use App\Http\Controllers\admin\configuration\department_controller as Department;
+use App\Http\Controllers\admin\configuration\program_controller as Program;
 
 Route::get('/logout', [Login::class, 'logout']);
 
@@ -112,6 +113,15 @@ Route::middleware('auth_check')->group(function(){
             Route::prefix('/department')->group(function(){
                 Route::get('/', [Department::class, 'index']);
                 Route::post('/new', [Department::class, 'store']);
+                Route::get('/delete/{id}', [Department::class, 'destroy']);
+                Route::post('/update/{id}', [Department::class, 'update']);
+            });
+
+            Route::prefix('/program')->group(function(){
+                Route::get('/', [Program::class, 'index']);
+                Route::post('/new', [Program::class, 'store']);
+                Route::get('/delete/{id}', [Program::class, 'destroy']);
+                Route::post('/update/{id}', [Program::class, 'update']);
             });
         });
     });

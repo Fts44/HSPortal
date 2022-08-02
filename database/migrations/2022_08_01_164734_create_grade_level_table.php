@@ -14,7 +14,7 @@ class CreateGradeLevelTable extends Migration
     public function up()
     {
         Schema::create('grade_level', function (Blueprint $table) {
-            $table->id();
+            $table->id('gl_id');
             $table->string('gl_name');
         });
     }

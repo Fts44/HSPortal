@@ -12,8 +12,8 @@
             <h1>Education</h1>
             <nav>
                 <ol class="breadcrumb mt-1" style="--bs-breadcrumb-divider: '|';">
-                    <li class="breadcrumb-item active">GradeLevel</li>
-                    <li class="breadcrumb-item"><a href="{{ url('admin/configuration/department') }}">Department</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url('admin/configuration/gradelevel') }}">GradeLevel</a></li>
+                    <li class="breadcrumb-item active">Department</li>
                     <li class="breadcrumb-item"><a href="{{ url('admin/configuration/program') }}">Program</a></li>
                 </ol>
             </nav>
@@ -38,7 +38,7 @@
         <div class="section" >
             <div class="card" id="cardTable">
                 <div class="card-body px-4">
-                    <h5 class="card-title">Grade Levels</h5>
+                    <h5 class="card-title">Department</h5>
                     <a href="#" class="btn btn-secondary btn-sm" id="add" style="float: right; margin-top: -2.5rem;">
                         <i class="bi bi-plus-lg"></i>          
                     </a>
@@ -46,20 +46,26 @@
                         <thead> 
                             <tr>
                                 <th scope="col">ID</th>
+                                <th scope="col" class="d-none">gl_id</th>
                                 <th scope="col">Grade Level</th>
+                                <th scope="col">Code</th>
+                                <th scope="col">Name</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody style = "width: 100%;">
-                            @foreach($grade_levels as $grade_level)
-                                <tr>
-                                    <td>{{ $grade_level->gl_id }}</td>
-                                    <td>{{ $grade_level->gl_name}}</td>
-                                    <td>
-                                        <a class="btn btn-primary btn-sm" id="update_btn"><i class="bi bi-pencil"></i></a>
-                                        <a href="{{ url('admin/configuration/gradelevel/delete/'.$grade_level->gl_id) }}" class="btn btn-danger btn-sm"><i class="bi bi-eraser"></i></a>
-                                    </td>
-                                </tr>
+                            @foreach($departments as $department)
+                            <tr>
+                                <td>{{ $department->dept_id }}</td>
+                                <td class="d-none">{{ $department->gl_id }}</td>
+                                <td>{{ $department->gl_name }}</td>
+                                <td>{{ $department->dept_code }}</td>
+                                <td>{{ $department->dept_name }}</td>
+                                <td>
+                                    <a class="btn btn-primary btn-sm" id="update_btn"><i class="bi bi-pencil"></i></a>
+                                    <a href="{{ url('admin/configuration/department/delete/'.$department->dept_id) }}" class="btn btn-danger btn-sm"><i class="bi bi-eraser"></i></a>
+                                </td>
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>
@@ -72,7 +78,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal_title">Add Grade level</h5>
+                <h5 class="modal-title" id="modal_title">Add Department</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="" method="post" id="form">
@@ -80,11 +86,38 @@
                     @csrf
                     <div class="col-lg-12">
                         <div class="row">
-                            <label for="name" class="col-lg-12 col-form-label">Grade level:</label>
+                            <label for="grade_level" class="col-lg-12 col-form-label">Grade level:</label>
                             <div class="col-lg-12">
-                                <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}">
+                                <select name="grade_level" id="grade_level" class="form-select">
+                                    <option value="">Choose</option>
+                                    @foreach($grade_levels as $grade_level)
+                                    <option value="{{ $grade_level->gl_id }}">{{ $grade_level->gl_name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                            <span class="col-lg-12 text-danger" id="gl_name_error">
+                            <span class="col-lg-12 text-danger">
+                                @error('grade_level')
+                                    {{ $message }}
+                                @enderror
+                            </span>
+                        </div>
+                        <div class="row mt-3">
+                            <label for="code" class="col-lg-12 col-form-label">Code:</label>
+                            <div class="col-lg-12">
+                                <input type="text" class="form-control" name="code" id="code" value="{{ old('code') }}">
+                            </div>
+                            <span class="col-lg-12 text-danger">
+                                @error('code')
+                                    {{ $message }}
+                                @enderror
+                            </span>
+                        </div>
+                        <div class="row mt-3">
+                            <label for="name" class="col-lg-12 col-form-label">Name:</label>
+                            <div class="col-lg-12">
+                                <input type="text" class="form-control" name="name" id="name" value="{{ old('name') }}">
+                            </div>
+                            <span class="col-lg-12 text-danger">
                                 @error('name')
                                     {{ $message }}
                                 @enderror
@@ -112,7 +145,7 @@
                     console.log("{{ session('url') }}");
                     $('#form').attr('action', "{{ session('url') }}");
                     @if(session('action') == 'update') 
-                        $('#modal_title').html('Update Grade level');
+                        $('#modal_title').html('Update Department');
                         $('#submit_button').html('Update');
                     @endif
                 @endif
@@ -123,9 +156,11 @@
 
             $('#add').click(function(e){
                 e.preventDefault();
-                $('#form').attr('action', "{{ url('admin/configuration/gradelevel/new') }}");
-                $('#modal_title').html('Add Grade level');
+                $('#form').attr('action', "{{ url('admin/configuration/department/new') }}");
+                $('#modal_title').html('Add Department');
                 $('#submit_button').html('Add');
+                $('#grade_level').val('');
+                $('#code').val('');
                 $('#name').val('');
                 $('#modal').modal('show');
             });
@@ -142,8 +177,10 @@
 
                 var data = table.row($tr).data();
                 console.log(data);
-                $('#name').val(data[1]);
-                $('#form').attr('action', "{{ url('admin/configuration/gradelevel/update') }}"+"/"+data[0]);
+                $('#grade_level').val(data[1]);
+                $('#code').val(data[3]);
+                $('#name').val(data[4]);
+                $('#form').attr('action', "{{ url('admin/configuration/department/update') }}"+"/"+data[0]);
                 $('#modal_title').html('Update Grade level');
                 $('#submit_button').html('Update');
                 $('#modal').modal('show');
