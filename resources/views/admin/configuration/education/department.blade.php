@@ -91,7 +91,7 @@
                                 <select name="grade_level" id="grade_level" class="form-select">
                                     <option value="">Choose</option>
                                     @foreach($grade_levels as $grade_level)
-                                    <option value="{{ $grade_level->gl_id }}">{{ $grade_level->gl_name }}</option>
+                                        <option value="{{ $grade_level->gl_id }}" {{ ($grade_level->gl_id==old('grade_level')) ? 'selected' : '' }}>{{ $grade_level->gl_name }}</option>
                                     @endforeach
                                 </select>
                             </div>

@@ -47,14 +47,30 @@
                             <tr>
                                 <th scope="col">ID</th>
                                 <th scope="col" class="d-none">gl_id</th>
-                                <th scope="col">Grade Level</th>
+                                <th scope="col">GradeLevel</th>
+                                <th scope="col" class="d-none">dept_id</th>
+                                <th scope="col">Department</th>
                                 <th scope="col">Code</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody style = "width: 100%;">
-                            
+                            @foreach($programs as $program)
+                            <tr>
+                                <td>{{ $program->prog_id }}</td>
+                                <td class="d-none">{{ $program->gl_id }}</td>
+                                <td>{{ $program->gl_name }}</td>
+                                <td class="d-none">{{ $program->dept_id }}</td>
+                                <td>{{ $program->dept_code }}</td>
+                                <td>{{ $program->prog_code }}</td>
+                                <td>{{ $program->prog_name }}</td>
+                                <td>
+                                    <a class="btn btn-primary btn-sm" id="update_btn"><i class="bi bi-pencil"></i></a>
+                                    <a href="{{ url('admin/configuration/program/delete/'.$program->prog_id) }}" class="btn btn-danger btn-sm"><i class="bi bi-eraser"></i></a>
+                                </td>
+                            </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -90,13 +106,10 @@
                             </span>
                         </div>
                         <div class="row mt-3">
-                            <label for="grade_level" class="col-lg-12 col-form-label">Grade level:</label>
+                            <label for="department" class="col-lg-12 col-form-label">Department:</label>
                             <div class="col-lg-12">
-                                <select name="grade_level" id="grade_level" class="form-select">
+                                <select name="department" id="department" class="form-select">
                                     <option value="">Choose</option>
-                                    @foreach($departments as $department)
-                                    <option value="{{ $department->dept_id }}">{{ $department->dept_name }}</option>
-                                    @endforeach
                                 </select>
                             </div>
                             <span class="col-lg-12 text-danger">
@@ -149,7 +162,7 @@
                     console.log("{{ session('url') }}");
                     $('#form').attr('action', "{{ session('url') }}");
                     @if(session('action') == 'update') 
-                        $('#modal_title').html('Update Department');
+                        $('#modal_title').html('Update Program');
                         $('#submit_button').html('Update');
                     @endif
                 @endif
@@ -160,8 +173,8 @@
 
             $('#add').click(function(e){
                 e.preventDefault();
-                $('#form').attr('action', "{{ url('admin/configuration/department/new') }}");
-                $('#modal_title').html('Add Department');
+                $('#form').attr('action', "{{ url('admin/configuration/program/new') }}");
+                $('#modal_title').html('Add Program');
                 $('#submit_button').html('Add');
                 $('#grade_level').val('');
                 $('#code').val('');
@@ -182,12 +195,18 @@
                 var data = table.row($tr).data();
                 console.log(data);
                 $('#grade_level').val(data[1]);
+                get_set_department('#department',data[3],data[1]);
                 $('#code').val(data[3]);
-                $('#name').val(data[4]);
-                $('#form').attr('action', "{{ url('admin/configuration/department/update') }}"+"/"+data[0]);
-                $('#modal_title').html('Update Grade level');
+                $('#code').val(data[5]);
+                $('#name').val(data[6]);
+                $('#form').attr('action', "{{ url('admin/configuration/program/update') }}"+"/"+data[0]);
+                $('#modal_title').html('Update Program');
                 $('#submit_button').html('Update');
                 $('#modal').modal('show');
+            });
+
+            $('#grade_level').change(function(){
+                get_set_department('#department','all',$(this).val());
             });
         });
     </script>

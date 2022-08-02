@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\otp_controller;
 use App\Http\Controllers\mailer_controller;
+use App\Http\Controllers\populate_select_controller as PopulateSelect;
 
 use App\Http\Controllers\index\registration_controller as Register;
 use App\Http\Controllers\index\login_controller as Login;
@@ -132,6 +133,12 @@ Route::middleware('auth_check')->group(function(){
 
     Route::prefix('doctor')->group(function(){
 
+    });
+
+    Route::prefix('/populate')->group(function(){
+        Route::get('grade_level', [PopulateSelect::class, 'grade_level']);
+        Route::get('department/{grade_level}', [PopulateSelect::class, 'department']);
+        Route::get('program/{department}', [PopulateSelect::class, 'program']);
     });
 });
 

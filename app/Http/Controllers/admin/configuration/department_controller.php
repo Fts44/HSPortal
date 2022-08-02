@@ -26,7 +26,7 @@ class department_controller extends Controller
     {
         $validator = Validator::make($request->all(),[
             'grade_level' => 'required|exists:grade_level,gl_id',
-            'code' => 'required|unique:department,dept_code',
+            'code' => 'required|unique:department,dept_code,'.$request->department.',gl_id,'.$request->grade_level,
             'name' => 'required|unique:department,dept_name'
         ]);
 
@@ -86,7 +86,7 @@ class department_controller extends Controller
     public function destroy($id)
     {
         try {
-            $grade_level = DB::table('grade_level')->where('gl_id', $id)->delete();
+            $grade_level = DB::table('department')->where('dept_id', $id)->delete();
             $message = 'Department deleted!';
             return redirect()->back()->with('success', $message);
         }catch (Exception $e) {
@@ -94,4 +94,6 @@ class department_controller extends Controller
             return redirect()->back()->with('failed', $message);
         }
     }
+
+    
 }
