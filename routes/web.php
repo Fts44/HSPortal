@@ -47,7 +47,7 @@ Route::middleware('auth_check')->group(function(){
         Route::prefix('/')->group(function(){
             Route::get('/', [PatientProfile::class, 'index']);
             Route::post('/updatemyprofile/{id}', [PatientProfile::class, 'update_personal_info']);
-            Route::post('/updatemyemergencycontact/{id}', [Emergency::class, 'update_emergency_contact']);
+            Route::post('/updatemyemergencycontact/{id}', [PatientProfile::class, 'update_emergency_contact']);
         });
 
         Route::prefix('/documents')->group(function(){

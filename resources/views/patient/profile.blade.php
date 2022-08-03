@@ -24,20 +24,29 @@
                         <!-- Bordered Tabs -->
                         <ul class="nav nav-tabs nav-tabs-bordered">
 
+                            @php
+                                if(session()->has('active_page')){
+                                    $active_page = session()->get('active_page');
+                                }
+                                else{
+                                    $active_page = 'profile';
+                                }
+                            @endphp
+
                             <li class="nav-item">
-                                <button class="nav-link {{($active_page=='profile')?'active':''}}" data-bs-toggle="tab" data-bs-target="#profile-edit">Profile</button>
+                                <button class="nav-link {{ ($active_page=='profile')?'active':'' }}" data-bs-toggle="tab" data-bs-target="#profile-edit">Profile</button>
                             </li>
 
                             <li class="nav-item">
-                                <button class="nav-link {{($active_page=='emergency_contact')?'active':''}}" data-bs-toggle="tab" data-bs-target="#profile-emergency-contact">Emergency Contact</button>
+                                <button class="nav-link {{ ($active_page=='emergency_contact')?'active':'' }}" data-bs-toggle="tab" data-bs-target="#profile-emergency-contact">Emergency Contact</button>
                             </li>
 
                             <li class="nav-item">
-                                <button class="nav-link {{($active_page=='password')?'active':''}}" data-bs-toggle="tab" data-bs-target="#profile-change-password">Password</button>
+                                <button class="nav-link {{ ($active_page=='password')?'active':'' }}" data-bs-toggle="tab" data-bs-target="#profile-change-password">Password</button>
                             </li>
 
                         </ul>
-
+                        
                         <!-- Profile Edit Form -->
                         <div class="tab-content pt-2">
 
@@ -386,9 +395,9 @@
                             <!-- End Profile Edit Form -->
 
                             <!-- emergency contact form -->
-                            <div class="tab-pane fade p-3 {{($active_page=='emergency_contact')?'active show':''}}" id="profile-emergency-contact">
+                            <div class="tab-pane fade p-3 {{ ($active_page=='emergency_contact')?'active show':'' }}" id="profile-emergency-contact">
 
-                                <form method="POST" action="{{ url('patient/updatemyemergencycontact/'.session()->get('userid_gsuite_email')) }}">
+                                <form method="POST" action="{{ url('patient/updatemyemergencycontact/'.session()->get('user_id')) }}">
                                     
                                     @csrf
 
@@ -397,35 +406,58 @@
                                         <div class="col-lg-10">
                                             <div class="row">
                                                 <div class="col-lg-4 mt-1">
-                                                    <input class="form-control" type="text" name="emerg_fn" id="emerg_fn" placeholder="First">
+                                                    <input class="form-control" type="text" name="emerg_fn" id="emerg_fn" placeholder="First" value="{{ old('emerg_fn',$emerg_info->first_name) }}">
+                                                    <span class="text-danger">
+                                                        @error('emerg_fn')
+                                                            {{ $message }}
+                                                        @enderror
+                                                    </span>
                                                 </div>
                                                 <div class="col-lg-4 mt-1">
-                                                    <input class="form-control" type="text" name="emerg_mn" id="emerg_mn" placeholder="Middle">
+                                                    <input class="form-control" type="text" name="emerg_mn" id="emerg_mn" placeholder="Middle" value="{{ old('emerg_mn',$emerg_info->middle_name) }}">
+                                                    <span class="text-danger">
+                                                        @error('emerg_mn')
+                                                            {{ $message }}
+                                                        @enderror
+                                                    </span>
                                                 </div>
                                                 <div class="col-lg-4 mt-1">
-                                                    <input class="form-control" type="text" name="emerg_ln" id="emerg_ln" placeholder="Last">
+                                                    <input class="form-control" type="text" name="emerg_ln" id="emerg_ln" placeholder="Last" value="{{ old('emerg_ln',$emerg_info->last_name) }}">
+                                                    <span class="text-danger">
+                                                        @error('emerg_ln')
+                                                            {{ $message }}
+                                                        @enderror
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-lg-2 mt-1">
-                                            <input class="form-control" type="text" name="emerg_suffix" id="emerg_suffix" placeholder="Suffix">
+                                            <input class="form-control" type="text" name="emerg_sn" id="emerg_sn" placeholder="Suffix" value="{{ old('emerg_suffix',$emerg_info->suffix_name) }}">
                                         </div>
                                     </div>
 
                                     <div class="row mb-3">
                                         <div class="col-lg-4">
-                                            <label for="" class="col-lg-12 col-form-label">Landline</label>
-                                            <input class="form-control mt-1" type="text" placeholder="" name="emerg_landline" id="emerg_landline">
+                                            <label for="emerg_landline" class="col-lg-12 col-form-label">Landline</label>
+                                            <input class="form-control mt-1" type="text" placeholder="" name="emerg_landline" id="emerg_landline" value="{{ old('emerg_landline',$emerg_info->landline) }}">
                                         </div>
                                         <div class="col-lg-4">
-                                            <label for="" class="col-lg-12 col-form-label">Contact Number</label>
-                                            <input class="form-control mt-1" type="tel"  placeholder="0912-345-6789" pattern="[0-9]{4}-[0-9]{3}-[0-9]{4}" name="emerg_contact" id="emerg_relation">
+                                            <label for="emerg_contact" class="col-lg-12 col-form-label">Contact Number</label>
+                                            <input class="form-control mt-1" type="tel"  placeholder="09123456789" name="emerg_contact" id="emerg_contact" value="{{ old('emerg_contact',$emerg_info->contact) }}">
+                                            <span class="text-danger">
+                                                @error('emerg_contact')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span>
                                         </div>
                                         <div class="col-lg-4">
-                                            <label for="" class="col-lg-12 col-form-label">Relation to you</label>
-                                            <select class="form-select mt-1" name="emerg_relation" id="emerg_relation" placeholder="">
-                                                <option value="">Choose</option>
-                                            </select>
+                                            <label for="emerg_relation" class="col-lg-12 col-form-label">Relation to you</label>
+                                            <input type="text" class="form-control mt-1" name="emerg_relation" id="emerg_relation" placeholder="" value="{{ old('emerg_relation',$emerg_info->relation) }}">
+                                            <span class="text-danger">
+                                                @error('emerg_relation')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span>
                                         </div>
                                     </div>
 
@@ -435,16 +467,31 @@
                                             <select class="form-select mt-1" name="emerg_prov" id="emerg_prov">
                                                 <option value="">Choose Province</option>
                                             </select>
+                                            <span class="text-danger">
+                                                @error('emerg_prov')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span>
                                         </div>
                                         <div class="col-lg-4">
                                             <select class="form-select mt-1" name="emerg_mun" id="emerg_mun">
                                                 <option value="">Choose Municipality</option>
                                             </select>
+                                            <span class="text-danger">
+                                                @error('emerg_mun')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span>
                                         </div>
                                         <div class="col-lg-4">
                                             <select class="form-select mt-1" name="emerg_brgy" id="emerg_brgy">
                                                 <option value="">Choose Barangay</option>
                                             </select>
+                                            <span class="text-danger">
+                                                @error('emerg_brgy')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span>
                                         </div>
                                     </div>
 
@@ -520,6 +567,7 @@
                 swal('{{$status->title}}','{{$status->message}}','{{$status->icon}}');
             @endif
 
+            // ============================= personal information ===================================
             @if($home_add)
                 get_set_province('#home_prov','{{ old("home_prov",$home_add->province) }}');
                 get_set_municipality('#home_mun','{{ old("home_mun",$home_add->municipality) }}','{{ old("home_prov",$home_add->province) }}');
@@ -578,6 +626,28 @@
             $('#department').change(function(){
                 get_set_program('#program', "", $('#department').val());
             })
+
+            // ============================= personal information ===================================
+
+            // ============================= emergency contact ===================================
+
+            @if($emerg_biz_add)
+                get_set_province('#emerg_prov','{{ old("emerg_prov",$emerg_biz_add->province) }}');
+                get_set_municipality('#emerg_mun','{{ old("emerg_mun",$emerg_biz_add->municipality) }}','{{ old("emerg_prov",$emerg_biz_add->province) }}');
+                get_set_barangay('#emerg_brgy','{{ old("emerg_brgy",$emerg_biz_add->barangay) }}','{{ old("emerg_mun",$emerg_biz_add->municipality) }}');
+            @else
+                get_set_province('#emerg_prov','');
+            @endif
+
+            $('#emerg_prov').change(function(){
+                get_set_municipality('#emerg_mun','', $('#emerg_prov').val(), '#emerg_brgy');
+                get_set_barangay('#emerg_brgy','', $('#emerg_mun').val());
+            });
+            $('#emerg_mun').change(function(){
+                get_set_barangay('#emerg_brgy','', $('#emerg_mun').val());
+            });
+
+             // ============================= emergency contact ===================================
         });
     </script>
 @endpush

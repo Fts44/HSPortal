@@ -6,22 +6,112 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Session;
 
 class profile_controller extends Controller
 {
     public function update_emergency_contact(Request $request, $id){
+        Session()->put('active_page', 'emergency_contact');
         $rules = [
-
+            'emerg_fn' => ['required'],
+            'emerg_mn' => ['required'],
+            'emerg_ln' => ['required'],
+            'emerg_contact' => ['required'],
+            'emerg_relation' => ['required'],
+            'emerg_prov' => ['required'],
+            'emerg_mun' => ['required'],
+            'emerg_brgy' => ['required']
         ];
 
-        $validator = Validator::make( $request->all(), $rules);
+        $message = [
+            'emerg_fn.required' => 'Firstname is required.',
+            'emerg_mn.required' => 'Middlename is required',
+            'emerg_ln.required' => 'Lastname is required',
+            'emerg_contact.required' => 'Contact is required',
+            'emerg_relation.required' => 'Relation is required',
+            'emerg_prov.required' => 'Province is required',
+            'emerg_mun.required' => 'Municipality is required',
+            'emerg_brgy.required' => 'Barangay is required'
+        ];
+
+        $validator = Validator::make( $request->all(), $rules, $message);
 
         if($validator->fails()){
-            echo json_encode($validator->messages());
+            $response = [
+                'title' => 'Failed!',
+                'message' => 'Invalid data, Emergency contact not updated.',
+                'icon' => 'error',
+                'status' => 400
+            ];
+            $response = json_encode($response, true);
+            return redirect()->back()->with('status',$response)->withErrors($validator)->withInput($request->all());
         }
+        else{
+            try{
+                DB::transaction(function() use($request, $id) {
+                    $emerg_id = DB::table('accounts')->where('id', $id)->first()->emergency_contact_id;
+                    $emerg_details = DB::table('emergency_contact')->where('id', $emerg_id)->first();
+    
+                    if(!$emerg_details){
+                        $emerg_address_id = DB::table('address')->insertGetId([
+                            'province' => $request->emerg_prov,
+                            'municipality' => $request->emerg_mun,
+                            'barangay' => $request->emerg_brgy
+                        ]);
+    
+                        $emerg_details_id = DB::table('emergency_contact')->insertGetId([
+                            'first_name' => $request->emerg_fn,
+                            'middle_name' => $request->emerg_mn,
+                            'last_name' => $request->emerg_ln,
+                            'suffix_name' => $request->emerg_sn,
+                            'relation' => $request->emerg_relation,
+                            'landline' => $request->emerg_landline,
+                            'contact' => $request->emerg_contact,
+                            'biz_address_id' => $emerg_address_id
+                        ]);
+    
+                        DB::table('accounts')->where('id', $id)->update([
+                            'emergency_contact_id' => $emerg_details_id
+                        ]);
+                    }
+                    else{
+                        DB::table('address')->where('id', $emerg_details->biz_address_id)->update([
+                            'province' => $request->emerg_prov, 
+                            'municipality' => $request->emerg_mun,
+                            'barangay' => $request->emerg_brgy
+                        ]);
+
+                        DB::table('emergency_contact')->where('id', $emerg_id)->update([
+                            'first_name' => $request->emerg_fn,
+                            'middle_name' => $request->emerg_mn,
+                            'last_name' => $request->emerg_ln,
+                            'suffix_name' => $request->emerg_sn,
+                            'relation' => $request->emerg_relation,
+                            'landline' => $request->emerg_landline,
+                            'contact' => $request->emerg_contact
+                        ]);
+                    }
+                    
+                });
+                $response = [
+                    'title' => 'Success!',
+                    'message' => 'Emergency contact updated.',
+                    'icon' => 'success',
+                    'status' => 200
+                ];
+                $response = json_encode($response, true);
+                return redirect()->back()->with('status',$response)->withInput($request->all());
+            }
+            catch(Exception $e){
+
+            }
+        }
+       // return redirect()->back();
+ 
     }
 
     public function update_personal_info(Request $request, $id){
+        Session()->put('active_page', 'profile');
         $rules = [
             'gsuite_email' => ['email','unique:accounts,gsuite_email,'.$id.',id'],
             'email' => ['required','email','unique:accounts,email,'.$id.',id'],
@@ -57,7 +147,7 @@ class profile_controller extends Controller
         if($validator->fails()){
             $response = [
                 'title' => 'Failed!',
-                'message' => 'Invalid or Mising data, Information not updated.',
+                'message' => 'Invalid data, Information not updated.',
                 'icon' => 'error',
                 'status' => 400
             ];
@@ -174,14 +264,35 @@ class profile_controller extends Controller
     }
 
     public function index(){
-        $active_page = 'profile';
         $personal_info = DB::table('accounts')->where('id', session('user_id'))->first();
 
         $home_add = DB::table('address')->where('id', $personal_info->home_address_id)->first();
         $birth_add = DB::table('address')->where('id', $personal_info->birth_address_id)->first();
         $dorm_add = DB::table('address')->where('id', $personal_info->dorm_address_id)->first();
 
-        // echo json_encode($personal_info);
-        return view("patient.profile")->with(compact('active_page', 'personal_info', 'home_add', 'birth_add', 'dorm_add'));
+        $emerg_info = DB::table('emergency_contact')->where('id', $personal_info->emergency_contact_id)->first();
+
+        if($emerg_info){
+            $emerg_biz_add = DB::table('address')->where('id', $emerg_info->biz_address_id)->first();
+        }
+        else{
+            $emerg_biz_add = [
+                'province' => '',
+                'municipality' => '',
+                'barangay' => ''
+            ];
+            $emerg_info = [
+                'first_name' => '',
+                'middle_name' => '',
+                'last_name' => '',
+                'suffix_name' => '',
+                'relation' => '',
+                'landline' => '',
+                'contact' => ''
+            ];
+        }
+        $emerg_biz_add = (object)$emerg_biz_add;
+        $emerg_info = (object)$emerg_info;
+        return view("patient.profile")->with(compact('personal_info', 'home_add', 'birth_add', 'dorm_add','emerg_info','emerg_biz_add'));
     }
 }
