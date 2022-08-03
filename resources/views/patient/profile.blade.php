@@ -43,7 +43,7 @@
 
                             <div class="tab-pane fade p-3  {{($active_page=='profile')?'active show':''}}" id="profile-edit">
 
-                                <form method="POST" enctype="multipart/form-data" action="{{ url('patient/updatemyprofile/'.session()->get('userid_gsuite_email')) }}">
+                                <form method="POST" enctype="multipart/form-data" action="{{ url('patient/updatemyprofile/'.session()->get('user_id')) }}">
                                    
                                     @csrf
 
@@ -61,11 +61,12 @@
                                         <div class="col-lg-6">
                                             <label class="col-lg-12 col-form-label" for="gsuite_email">Gsuite Email</label>
                                             <div class="col-lg-12 mt-1">
-                                                <input name="gsuite_email" id="gsuite_email" type="text" class="form-control" placeholder="abc@g.batstate-u.edu.ph">
+                                                <input name="gsuite_email" id="gsuite_email" type="text" class="form-control" placeholder="abc@g.batstate-u.edu.ph" value="{{ $personal_info->gsuite_email }}" {{ ($personal_info->gsuite_email != null) ? 'disabled' : '' }}>
                                             </div>
                                             <span class="text-danger"></span>
                                         </div>
-                                        <div class="col-lg-6">
+
+                                        <div class="col-lg-6 {{ ($personal_info->gsuite_email != null) ? 'd-none' : '' }}">
                                             <div class="row">
                                                 <label for="otp" class="col-lg-12 col-form-label ">One Time Pin</label>
                                                 <div class="col-lg-12">
@@ -80,7 +81,6 @@
                                                     
                                                 </div>
                                             </div>
-                                            
                                         </div>
                                         
                                     </div>
@@ -89,14 +89,14 @@
                                         <div class="col-lg-8">
                                             <label class="col-lg-12 col-form-label" for="email">Personal Email</label>
                                             <div class="col-lg-12 mt-1">
-                                                <input name="email" id="email" type="text" class="form-control"  placeholder="abc@example.com">
+                                                <input name="email" id="email" type="text" class="form-control"  placeholder="abc@example.com"  value="{{ $personal_info->email }}" >
                                             </div>
                                         </div>   
                                         
                                         <div class="col-lg-4">
                                             <label class="col-lg-12 col-form-label" for="sr_code">SR-Code:</label>
                                             <div class="col-lg-12 mt-1">
-                                                <input name="sr_code" id="sr_code" type="text" class="form-control" placeholder="12-34567">
+                                                <input name="sr_code" id="sr_code" type="text" class="form-control" placeholder="12-34567"  value="{{ $personal_info->contact }}" >
                                             </div>
                                         </div>
                                     </div>
@@ -108,18 +108,18 @@
                                                 <div class="col-lg-10">
                                                     <div class="row">
                                                         <div class="col-lg-4 mt-1">
-                                                            <input name="first_name" type="text" class="form-control" placeholder="First">
+                                                            <input name="first_name" type="text" class="form-control" placeholder="First"  value="{{ $personal_info->first_name }}" >
                                                         </div>
                                                         <div class="col-lg-4 mt-1">
-                                                            <input name="middle_name" type="text" class="form-control" placeholder="Middle">
+                                                            <input name="middle_name" type="text" class="form-control" placeholder="Middle"  value="{{ $personal_info->middle_name }}" >
                                                         </div>
                                                         <div class="col-lg-4 mt-1">
-                                                            <input name="last_name" type="text" class="form-control" placeholder="Last">
+                                                            <input name="last_name" type="text" class="form-control" placeholder="Last" value="{{ $personal_info->last_name }}" >
                                                         </div>
                                                     </div> 
                                                 </div>  
                                                 <div class="col-lg-2 mt-1">
-                                                    <input name="last_name" type="text" class="form-control" placeholder="Suffix">
+                                                    <input name="last_name" type="text" class="form-control" placeholder="Suffix" value="{{ $personal_info->suffix_name }}" >
                                                 </div>
                                             </div>
                                             
@@ -133,8 +133,8 @@
                                                 <div class="col-lg-12 mt-1 text-center">
                                                     <select class="form-select" name="gender" id="gender">
                                                         <option value="">Choose</option>
-                                                        <option value="male">Male</option>
-                                                        <option value="female">Female</option>
+                                                        <option value="male" {{ ($personal_info->gender=='male') ? selected : '' }} >Male</option>
+                                                        <option value="female" {{ ($personal_info->gender=='female') ? selected : '' }} >Female</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -144,16 +144,16 @@
                                             <div class="col-lg-12 mt-1">
                                                 <select class="form-select" name="civil_status" id="civil_status">
                                                     <option value="">Choose</option>
-                                                    <option value="single">Single</option>
-                                                    <option value="married">Married</option>
-                                                    <option value="widowed">Widowed</option>
-                                                    <option value="divorced">Divorced</option>
+                                                    <option value="single" {{ ($personal_info->civil_status=='single') ? selected : '' }} >Single</option>
+                                                    <option value="married" {{ ($personal_info->civil_status=='married') ? selected : '' }} >Married</option>
+                                                    <option value="widowed" {{ ($personal_info->civil_status=='widowed') ? selected : '' }} >Widowed</option>
+                                                    <option value="divorced" {{ ($personal_info->civil_status=='divorced') ? selected : '' }} >Divorced</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
                                             <label for="contact" class="col-lg-12 col-form-label">Contact Number</label>
-                                            <input type="tel" class="form-control mt-1" name="contact" id="contact" placeholder="0912-345-6789" pattern="[0-9]{4}-[0-9]{3}-[0-9]{4}">
+                                            <input type="tel" class="form-control mt-1" name="contact" id="contact" value="{{ $personal_info->contact }}" >
                                         </div>
                                     </div>
 
@@ -180,16 +180,13 @@
                                         <div class="col-lg-4">
                                             <label class="col-lg-12 col-form-label" for="religion">Religion:</label>
                                             <div class="col-lg-12 mt-1">
-                                                <select class="form-select" name="religion" id="religion">
-                                                    <option value="">Choose</option>
-                                                    <option value="roman catholic">Roman Catholic</option>
-                                                </select>
+                                                <input type="text" class="form-control" name="religion" id="religion">
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
-                                            <label class="col-lg-12 col-form-label" for="birth_date">Birthdate:</label>
+                                            <label class="col-lg-12 col-form-label" for="birbirthdateth_date">Birthdate:</label>
                                             <div class="col-lg-12 mt-1">
-                                                <input name="birth_date" id="birth_date" type="date" class="form-control">
+                                                <input name="birthdate" id="birthdate" type="date" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
@@ -197,9 +194,9 @@
                                             <div class="col-lg-12 mt-1">
                                                 <select class="form-select" name="classification" id="classification">
                                                     <option value="">Choose</option>
-                                                    <option value="student">Student</option>
-                                                    <option value="teacher">Teacher</option>
-                                                    <option value="school personnel">School Personnel</option>
+                                                    <option value="student" {{ ($personal_info->classification=='student') ? 'selected' : '' }} >Student</option>
+                                                    <option value="teacher" {{ ($personal_info->classification=='teacher') ? 'selected' : '' }} >Teacher</option>
+                                                    <option value="school personnel" {{ ($personal_info->classification=='school personnel') ? 'selected' : '' }} >School Personnel</option>
                                                 </select>
                                             </div>
                                         </div>  
@@ -230,10 +227,6 @@
                                             <div class="col-lg-12 mt-1">
                                                 <select class="form-select" name="grade_level" id="grade_level">
                                                     <option value="">Choose</option>
-                                                    <option value="elementary">Elementary</option>
-                                                    <option value="junior high school">Junior High School</option>
-                                                    <option value="senior high school">Senior High School</option>
-                                                    <option value="college">College</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -253,6 +246,25 @@
                                                 </select>
                                             </div>
                                         </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label class="col-lg-12 col-form-label">Dorm Address (If any)</label>
+                                        <div class="col-lg-4 mt-1">
+                                            <select class="form-select" name="dorm_prov" id="dorm_prov">
+                                                <option value="">Choose Province</option>
+                                            </select>        
+                                        </div>
+                                        <div class="col-lg-4 mt-1">
+                                            <select class="form-select" name="dorm_mun" id="dorm_mun">
+                                                <option value="">Choose Municipality</option>
+                                            </select>        
+                                        </div>
+                                        <div class="col-lg-4 mt-1">
+                                            <select class="form-select" name="dorm_brgy" id="dorm_brgy">
+                                                <option value="">Choose Barangay</option>
+                                            </select>        
+                                        </div>  
                                     </div>
 
                                     <div class="text-center mt-4">
@@ -398,6 +410,54 @@
                 @endphp
                 swal('{{$status->title}}','{{$status->message}}','{{$status->icon}}');
             @endif
+
+            @if($home_add)
+                get_set_province('#home_prov','{{ $home_add->province }}');
+                get_set_municipality('#home_mun','', '{{ $home_add->municipality }}');
+                get_set_barangay('#home_brgy','', '{{ $home_add->barangay }}');
+            @else
+                get_set_province('#home_prov','');
+            @endif
+
+            @if($birth_add)
+                get_set_province('#birth_prov','{{ $birth_add->province }}');
+                get_set_municipality('#birth_mun','', '{{ $birth_add->municipality }}');
+                get_set_barangay('#birth_brgy','', '{{ $birth_add->barangay }}');
+            @else
+                get_set_province('#birth_prov','');
+            @endif
+
+            @if($dorm_add)
+                get_set_province('#dorm_prov','{{ $dorm_add->province }}');
+                get_set_municipality('#dorm_mun','', '{{ $dorm_add->municipality }}');
+                get_set_barangay('#dorm_brgy','', '{{ $dorm_add->barangay }}');
+            @else
+                get_set_province('#dorm_prov','');
+            @endif
+
+           
+            $('#home_prov').change(function(){
+                get_set_municipality('#home_mun','', $('#home_prov').val());
+            });
+            $('#home_mun').change(function(){
+                get_set_barangay('#home_brgy','', $('#home_mun').val());
+            });
+
+            $('#birth_prov').change(function(){
+                get_set_municipality('#birth_mun','', $('#birth_prov').val());
+            });
+            $('#birth_mun').change(function(){
+                get_set_barangay('#birth_brgy','', $('#birth_mun').val());
+            });
+
+            $('#dorm_prov').change(function(){
+                get_set_municipality('#dorm_mun','', $('#dorm_prov').val());
+            });
+            $('#dorm_mun').change(function(){
+                get_set_barangay('#dorm_brgy','', $('#dorm_mun').val());
+            });
+
+            get_set_grade_level('#grade_level', "{{ $personal_info->gl_id }}");
         });
     </script>
 @endpush

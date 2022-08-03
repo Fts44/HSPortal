@@ -24,6 +24,7 @@ class CreateAccountsTable extends Migration
             $table->string('first_name', 50)->nullable();
             $table->string('middle_name', 50)->nullable();
             $table->string('last_name', 50)->nullable();
+            $table->string('suffix_name', 50)->nullable();
 
             $table->date('birth_date')->nullable();
             $table->string('gender', 20)->nullable();
@@ -34,12 +35,12 @@ class CreateAccountsTable extends Migration
             $table->integer('birth_address_id')->nullable();
             $table->integer('dorm_address_id')->nullable();
 
-            $table->string('classification', 20)->nullable();
-            $table->string('position', 20)->nullable();
-            $table->string('grade_level', 20)->nullable();
-            $table->string('department', 20)->nullable();
-            $table->string('program', 20)->nullable();
-            $table->string('emergency_contact_id', 20)->nullable()->unique();
+            $table->string('classification')->nullable();
+            $table->string('position')->nullable();
+            $table->integer('gl_id')->nullable();
+            $table->integer('dept_id')->nullable();
+            $table->integer('prog_id')->nullable();
+            $table->integer('emergency_contact_id')->nullable()->unique();
             $table->string('profile_pic', 255)->nullable();
             $table->string('password', 100);
             $table->boolean('is_verified')->default(0);

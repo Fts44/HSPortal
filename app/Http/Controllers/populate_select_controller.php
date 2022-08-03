@@ -34,4 +34,22 @@ class populate_select_controller extends Controller
 
         return json_encode($programs);
     }
+
+    public function province(){
+        $province = file_get_contents(base_path('public/json/address/refprovince.json'));
+        
+        return $province;
+    }
+
+    public function municipality(){
+        $province = file_get_contents(base_path('public/json/address/refcitymun.json'));
+        
+        return $province;
+    }
+
+    public function barangay(){
+        $province = file_get_contents(base_path('public/json/address/refbrgy.json'));
+        
+        return $province;
+    }
 }

@@ -44,7 +44,7 @@
     <script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/rowreorder/1.2.8/js/dataTables.rowReorder.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
-    <script type="text/javascript" src="{{ asset('js/grade_level_department_program.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/populate_select.js') }}"></script>
     @stack('script') 
 </body>
 </html>

@@ -135,10 +135,15 @@ Route::middleware('auth_check')->group(function(){
 
     });
 
-    Route::prefix('/populate')->group(function(){
-        Route::get('grade_level', [PopulateSelect::class, 'grade_level']);
-        Route::get('department/{grade_level}', [PopulateSelect::class, 'department']);
-        Route::get('program/{department}', [PopulateSelect::class, 'program']);
-    });
+});
+
+Route::prefix('/populate')->group(function(){
+    Route::get('grade_level', [PopulateSelect::class, 'grade_level']);
+    Route::get('department/{grade_level}', [PopulateSelect::class, 'department']);
+    Route::get('program/{department}', [PopulateSelect::class, 'program']);
+
+    Route::get('province', [PopulateSelect::class, 'province']);
+    Route::get('municipality', [PopulateSelect::class, 'municipality']);
+    Route::get('barangay', [PopulateSelect::class, 'barangay']);
 });
 
