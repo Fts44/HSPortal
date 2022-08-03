@@ -9,8 +9,16 @@ use Illuminate\Support\Facades\DB;
 
 class profile_controller extends Controller
 {
-    public function __construct(){
+    public function update_emergency_contact(Request $request, $id){
+        $rules = [
 
+        ];
+
+        $validator = Validator::make( $request->all(), $rules);
+
+        if($validator->fails()){
+            echo json_encode($validator->messages());
+        }
     }
 
     public function update_personal_info(Request $request, $id){
@@ -40,12 +48,21 @@ class profile_controller extends Controller
             'birthdate' => ['required','date'],
             'classification' => ['required','in:student,teacher,school personnel'],
             'grade_level' => ['required','exists:grade_level,gl_id'],
+            'department' => ['required'],
+            'program' => ['required']
         ];
 
         $validator = Validator::make( $request->all(), $rules);
 
         if($validator->fails()){
-            echo json_encode($validator->messages());
+            $response = [
+                'title' => 'Failed!',
+                'message' => 'Invalid or Mising data, Information not updated.',
+                'icon' => 'error',
+                'status' => 400
+            ];
+            $response = json_encode($response, true);
+            return redirect()->back()->with('status',$response)->withErrors($validator)->withInput($request->all());
         }
         else{
             try{
@@ -133,10 +150,25 @@ class profile_controller extends Controller
                         'prog_id' => $request->program,
                     ]);
                 });
-                return redirect()->back()->withInput($request->all());
+
+                $response = [
+                    'title' => 'Success!',
+                    'message' => 'Personal information updated.',
+                    'icon' => 'success',
+                    'status' => 200
+                ];
+                $response = json_encode($response, true);
+                return redirect()->back()->with('status',$response)->withInput($request->all());
             } 
             catch (Exception $e) {
-                
+                $response = [
+                    'title' => 'Failed!',
+                    'message' => 'Personal information not updated.',
+                    'icon' => 'error',
+                    'status' => 400
+                ];
+                $response = json_encode($response, true);
+                return redirect()->back()->with('status',$response)->withInput($request->all());
             }
         }
     }

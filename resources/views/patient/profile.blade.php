@@ -63,7 +63,11 @@
                                             <div class="col-lg-12 mt-1">
                                                 <input name="gsuite_email" id="gsuite_email" type="text" class="form-control" placeholder="abc@g.batstate-u.edu.ph" value="{{ $personal_info->gsuite_email }}" {{ ($personal_info->gsuite_email != null) ? 'readonly' : '' }}>
                                             </div>
-                                            <span class="text-danger"></span>
+                                            <span class="text-danger">
+                                                @error('gsuite_email')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span>
                                         </div>
 
                                         <div class="col-lg-6 {{ ($personal_info->gsuite_email != null) ? 'd-none' : '' }}">
@@ -73,6 +77,11 @@
                                                     <div class="row">
                                                         <div class="col-lg-8 mt-1">
                                                             <input type="text" class="form-control" placeholder="OTP" name="otp" id="otp">
+                                                            <span class="text-danger">
+                                                                @error('otp')
+                                                                    {{ $message }}
+                                                                @enderror
+                                                            </span>
                                                         </div>
                                                         <div class="col-lg-4 mt-1">
                                                             <a class="btn btn-secondary" style="width: 100%;">Get OTP</a>
@@ -89,15 +98,25 @@
                                         <div class="col-lg-8">
                                             <label class="col-lg-12 col-form-label" for="email">Personal Email</label>
                                             <div class="col-lg-12 mt-1">
-                                                <input name="email" id="email" type="text" class="form-control"  placeholder="abc@example.com"  value="{{ $personal_info->email }}" >
+                                                <input name="email" id="email" type="text" class="form-control"  placeholder="abc@example.com"  value="{{   old('email',$personal_info->email) }}" >
                                             </div>
+                                            <span class="text-danger">
+                                                @error('email')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span>
                                         </div>   
                                         
                                         <div class="col-lg-4">
                                             <label class="col-lg-12 col-form-label" for="sr_code">SR-Code:</label>
                                             <div class="col-lg-12 mt-1">
-                                                <input name="sr_code" id="sr_code" type="text" class="form-control" placeholder="12-34567"  value="{{ $personal_info->contact }}" >
+                                                <input name="sr_code" id="sr_code" type="text" class="form-control" placeholder="12-34567"  value="{{ old('sr_code',$personal_info->sr_code) }}" >
                                             </div>
+                                            <span class="text-danger">
+                                                @error('sr_code')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span>
                                         </div>
                                     </div>
 
@@ -108,18 +127,33 @@
                                                 <div class="col-lg-10">
                                                     <div class="row">
                                                         <div class="col-lg-4 mt-1">
-                                                            <input name="first_name" type="text" class="form-control" placeholder="First"  value="{{ $personal_info->first_name }}" >
+                                                            <input name="first_name" type="text" class="form-control" placeholder="First"  value="{{ old('first_name',$personal_info->first_name) }}" >
+                                                            <span class="text-danger">
+                                                                @error('first_name')
+                                                                    {{ $message }}
+                                                                @enderror
+                                                            </span>
                                                         </div>
                                                         <div class="col-lg-4 mt-1">
-                                                            <input name="middle_name" type="text" class="form-control" placeholder="Middle"  value="{{ $personal_info->middle_name }}" >
+                                                            <input name="middle_name" type="text" class="form-control" placeholder="Middle"  value="{{ old('middle_name',$personal_info->middle_name) }}" >
+                                                            <span class="text-danger">
+                                                                @error('middle_name')
+                                                                    {{ $message }}
+                                                                @enderror
+                                                            </span>
                                                         </div>
                                                         <div class="col-lg-4 mt-1">
-                                                            <input name="last_name" type="text" class="form-control" placeholder="Last" value="{{ $personal_info->last_name }}" >
+                                                            <input name="last_name" type="text" class="form-control" placeholder="Last" value="{{ old('last_name',$personal_info->last_name) }}" >
+                                                            <span class="text-danger">
+                                                                @error('last_name')
+                                                                    {{ $message }}
+                                                                @enderror
+                                                            </span>
                                                         </div>
                                                     </div> 
                                                 </div>  
                                                 <div class="col-lg-2 mt-1">
-                                                    <input name="suffix_name" type="text" class="form-control" placeholder="Suffix" value="{{ $personal_info->suffix_name }}" >
+                                                    <input name="suffix_name" type="text" class="form-control" placeholder="Suffix" value="{{ old('suffix_name',$personal_info->suffix_name) }}" >
                                                 </div>
                                             </div>
                                             
@@ -133,10 +167,15 @@
                                                 <div class="col-lg-12 mt-1 text-center">
                                                     <select class="form-select" name="gender" id="gender">
                                                         <option value="">Choose</option>
-                                                        <option value="male" {{ ($personal_info->gender=='male') ? 'selected' : '' }} >Male</option>
-                                                        <option value="female" {{ ($personal_info->gender=='female') ? 'selected' : '' }} >Female</option>
+                                                        <option value="male" {{ (old('gender',$personal_info->gender)=='male') ? 'selected' : '' }} >Male</option>
+                                                        <option value="female" {{ (old('gender',$personal_info->gender)=='female') ? 'selected' : '' }} >Female</option>
                                                     </select>
                                                 </div>
+                                                <span class="text-danger">
+                                                    @error('gender')
+                                                        {{ $message }}
+                                                    @enderror
+                                                </span>
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
@@ -144,35 +183,60 @@
                                             <div class="col-lg-12 mt-1">
                                                 <select class="form-select" name="civil_status" id="civil_status">
                                                     <option value="">Choose</option>
-                                                    <option value="single" {{ ($personal_info->civil_status=='single') ? 'selected' : '' }} >Single</option>
-                                                    <option value="married" {{ ($personal_info->civil_status=='married') ? 'selected' : '' }} >Married</option>
-                                                    <option value="widowed" {{ ($personal_info->civil_status=='widowed') ? 'selected' : '' }} >Widowed</option>
-                                                    <option value="divorced" {{ ($personal_info->civil_status=='divorced') ? 'selected' : '' }} >Divorced</option>
+                                                    <option value="single" {{ (old('civil_status',$personal_info->civil_status)=='single') ? 'selected' : '' }} >Single</option>
+                                                    <option value="married" {{ (old('civil_status',$personal_info->civil_status)=='married') ? 'selected' : '' }} >Married</option>
+                                                    <option value="widowed" {{ (old('civil_status',$personal_info->civil_status)=='widowed') ? 'selected' : '' }} >Widowed</option>
+                                                    <option value="divorced" {{ (old('civil_status',$personal_info->civil_status)=='divorced') ? 'selected' : '' }} >Divorced</option>
                                                 </select>
                                             </div>
+                                            <span class="text-danger">
+                                                @error('civil_status')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span>
                                         </div>
                                         <div class="col-lg-4">
                                             <label for="contact" class="col-lg-12 col-form-label">Contact Number</label>
-                                            <input type="tel" class="form-control mt-1" name="contact" id="contact" value="{{ $personal_info->contact }}" >
+                                            <input type="tel" class="form-control mt-1" name="contact" id="contact" value="{{ old('contact',$personal_info->contact) }}" >
+                                            <span class="text-danger">
+                                                @error('contact')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span>
                                         </div>
                                     </div>
 
                                     <div class="row mb-3">
-                                        <label class="col-lg-12 col-form-label" for="gsuite_email">Home Address</label>
+                                        <label class="col-lg-12 col-form-label" for="home_prov">Home Address</label>
                                         <div class="col-lg-4 mt-1">
                                             <select class="form-select" name="home_prov" id="home_prov">
                                                 <option value="">Choose Province</option>
-                                            </select>        
+                                            </select>  
+                                            <span class="text-danger">
+                                                @error('home_prov')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span>      
                                         </div>
                                         <div class="col-lg-4 mt-1">
                                             <select class="form-select" name="home_mun" id="home_mun">
                                                 <option value="">Choose Municipality</option>
-                                            </select>        
+                                            </select>  
+                                            <span class="text-danger">
+                                                @error('home_mun')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span>       
                                         </div>
                                         <div class="col-lg-4 mt-1">
                                             <select class="form-select" name="home_brgy" id="home_brgy">
                                                 <option value="">Choose Barangay</option>
-                                            </select>        
+                                            </select> 
+                                            <span class="text-danger">
+                                                @error('home_brgy')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span>        
                                         </div>  
                                     </div>
 
@@ -180,25 +244,40 @@
                                         <div class="col-lg-4">
                                             <label class="col-lg-12 col-form-label" for="religion">Religion:</label>
                                             <div class="col-lg-12 mt-1">
-                                                <input type="text" class="form-control" name="religion" id="religion" value="{{ $personal_info->religion }}">
+                                                <input type="text" class="form-control" name="religion" id="religion" value="{{ old('religion',$personal_info->religion) }}">
                                             </div>
+                                            <span class="text-danger">
+                                                @error('religion')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span> 
                                         </div>
                                         <div class="col-lg-4">
                                             <label class="col-lg-12 col-form-label" for="birthdate">Birthdate:</label>
                                             <div class="col-lg-12 mt-1">
-                                                <input name="birthdate" id="birthdate" type="date" class="form-control" value="{{ $personal_info->birthdate }}">
+                                                <input name="birthdate" id="birthdate" type="date" class="form-control" value="{{ old('birthdate',$personal_info->birthdate) }}">
                                             </div>
+                                            <span class="text-danger">
+                                                @error('birthdate')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span> 
                                         </div>
                                         <div class="col-lg-4">
                                             <label class="col-lg-12 col-form-label" for="classification">Classification:</label>
                                             <div class="col-lg-12 mt-1">
                                                 <select class="form-select" name="classification" id="classification">
                                                     <option value="">Choose</option>
-                                                    <option value="student" {{ ($personal_info->classification=='student') ? 'selected' : '' }} >Student</option>
-                                                    <option value="teacher" {{ ($personal_info->classification=='teacher') ? 'selected' : '' }} >Teacher</option>
-                                                    <option value="school personnel" {{ ($personal_info->classification=='school personnel') ? 'selected' : '' }} >School Personnel</option>
+                                                    <option value="student" {{ (old('classification',$personal_info->classification)=='student') ? 'selected' : '' }} >Student</option>
+                                                    <option value="teacher" {{ (old('classification',$personal_info->classification)=='teacher') ? 'selected' : '' }} >Teacher</option>
+                                                    <option value="school personnel" {{ (old('classification',$personal_info->classification)=='school personnel') ? 'selected' : '' }} >School Personnel</option>
                                                 </select>
                                             </div>
+                                            <span class="text-danger">
+                                                @error('classification')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span> 
                                         </div>  
                                     </div>
 
@@ -208,16 +287,31 @@
                                             <select class="form-select" name="birth_prov" id="birth_prov">
                                                 <option value="">Choose Province</option>
                                             </select>
+                                            <span class="text-danger">
+                                                @error('birth_prov')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span> 
                                         </div>
                                         <div class="col-lg-4 mt-1">
                                             <select class="form-select" name="birth_mun" id="birth_mun">
                                                 <option value="">Choose Municipality</option>
                                             </select>
+                                            <span class="text-danger">
+                                                @error('birth_mun')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span> 
                                         </div>
                                         <div class="col-lg-4 mt-1">
                                             <select class="form-select" name="birth_brgy" id="birth_brgy">
                                                 <option value="">Choose Barangay</option>
                                             </select>
+                                            <span class="text-danger">
+                                                @error('birth_brgy')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span> 
                                         </div>
                                     </div>
 
@@ -229,6 +323,11 @@
                                                     <option value="">Choose</option>
                                                 </select>
                                             </div>
+                                            <span class="text-danger">
+                                                @error('grade_level')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span> 
                                         </div>
                                         <div class="col-lg-4">
                                             <label class="col-lg-12 col-form-label" for="department">Department:</label>
@@ -237,6 +336,11 @@
                                                     <option value="">Choose</option>
                                                 </select>
                                             </div>
+                                            <span class="text-danger">
+                                                @error('department')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span> 
                                         </div>
                                         <div class="col-lg-4">
                                             <label class="col-lg-12 col-form-label" for="program">Program:</label>
@@ -245,6 +349,11 @@
                                                     <option value="">Choose</option>
                                                 </select>
                                             </div>
+                                            <span class="text-danger">
+                                                @error('program')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span> 
                                         </div>
                                     </div>
 
@@ -412,25 +521,25 @@
             @endif
 
             @if($home_add)
-                get_set_province('#home_prov','{{ $home_add->province }}');
-                get_set_municipality('#home_mun','{{ $home_add->municipality }}','{{ $home_add->province }}');
-                get_set_barangay('#home_brgy','{{ $home_add->barangay }}','{{ $home_add->municipality }}');
+                get_set_province('#home_prov','{{ old("home_prov",$home_add->province) }}');
+                get_set_municipality('#home_mun','{{ old("home_mun",$home_add->municipality) }}','{{ old("home_prov",$home_add->province) }}');
+                get_set_barangay('#home_brgy','{{ old("home_brgy",$home_add->barangay) }}','{{ old("home_mun",$home_add->municipality) }}');
             @else
                 get_set_province('#home_prov','');
             @endif
 
             @if($birth_add)
-                get_set_province('#birth_prov','{{ $birth_add->province }}');
-                get_set_municipality('#birth_mun','{{ $birth_add->municipality }}','{{ $birth_add->province }}');
-                get_set_barangay('#birth_brgy','{{ $birth_add->barangay }}','{{ $birth_add->municipality }}');
+                get_set_province('#birth_prov','{{ old("birth_prov",$birth_add->province) }}');
+                get_set_municipality('#birth_mun','{{ old("birth_mun",$birth_add->municipality) }}','{{ old("birth_prov",$birth_add->province) }}');
+                get_set_barangay('#birth_brgy','{{ old("birth_brgy",$birth_add->barangay) }}','{{ old("birth_mun",$birth_add->municipality) }}');
             @else
                 get_set_province('#birth_prov','');
             @endif
 
             @if($dorm_add)
-                get_set_province('#dorm_prov','{{ $dorm_add->province }}');
-                get_set_municipality('#dorm_mun','{{ $dorm_add->municipality }}','{{ $dorm_add->province }}');
-                get_set_barangay('#dorm_brgy','{{ $dorm_add->barangay }}','{{ $dorm_add->municipality }}');
+                get_set_province('#dorm_prov','{{ old("dorm_prov",$dorm_add->province) }}');
+                get_set_municipality('#dorm_mun','{{ old("dorm_mun",$dorm_add->municipality) }}','{{ old("dorm_prov",$dorm_add->province) }}');
+                get_set_barangay('#dorm_brgy','{{ old("dorm_brgy",$dorm_add->barangay) }}','{{ old("dorm_mun",$dorm_add->municipality) }}');
             @else
                 get_set_province('#dorm_prov','');
             @endif
@@ -459,9 +568,9 @@
                 get_set_barangay('#dorm_brgy','', $('#dorm_mun').val());
             });
 
-            get_set_grade_level('#grade_level', "{{ $personal_info->gl_id }}");
-            get_set_department('#department', "{{ $personal_info->dept_id }}", "{{ $personal_info->gl_id }}");
-            get_set_program('#program', "{{ $personal_info->prog_id }}", "{{ $personal_info->dept_id }}");
+            get_set_grade_level('#grade_level', "{{ old('grade_level',$personal_info->gl_id) }}");
+            get_set_department('#department', "{{ old('department',$personal_info->dept_id) }}", "{{ old('grade_level',$personal_info->gl_id) }}");
+            get_set_program('#program', "{{ old('program',$personal_info->prog_id) }}", "{{ old('department',$personal_info->dept_id) }}");
 
             $('#grade_level').change(function(){
                 get_set_department('#department', "", $('#grade_level').val(), '#program');

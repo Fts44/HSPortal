@@ -43,6 +43,11 @@ function get_set_department(input, dept_id, gl_id, prog_input){
 
     clear_select(input, 'Choose Department'); //clear select
     $(input).append($('<option>', {
+        value: 'none',
+        text: 'N/A',
+        selected: ('none'==dept_id) ? true : false
+    }));
+    $(prog_input).append($('<option>', {
         value: null,
         text: 'N/A'
     }));
@@ -78,18 +83,18 @@ function get_set_department(input, dept_id, gl_id, prog_input){
 function get_set_program(input, prog_id, dept_id, ){
 
     clear_select(input, 'Choose Program'); //clear select
-
+    $(input).append($('<option>', {
+        value: 'none',
+        text: 'N/A',
+        selected: ('none'==prog_id) ? true : false
+    }));
+    
     $.ajax({
         url: window.location.origin+"/populate/program/"+dept_id,
         type: "GET",
         success: function (response) {
 
             let programs = JSON.parse(response); //parse to json
-
-            $(input).append($('<option>', {
-                value: null,
-                text: 'N/A'
-            }));
 
             for (var program of programs)  //append result
             {
