@@ -44,7 +44,7 @@ class mailer_controller extends Controller
                 }
             }
 
-            $mail->isHTML(true);                // Set email content format to HTML
+            $mail->isHTML(true);// Set email content format to HTML
 
             $mail->Subject = $request->subject;
             $mail->Body    = $request->body;

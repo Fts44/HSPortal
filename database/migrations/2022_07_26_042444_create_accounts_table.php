@@ -26,7 +26,7 @@ class CreateAccountsTable extends Migration
             $table->string('last_name', 50)->nullable();
             $table->string('suffix_name', 50)->nullable();
 
-            $table->date('birth_date')->nullable();
+            $table->date('birthdate')->nullable();
             $table->string('gender', 20)->nullable();
             $table->string('civil_status', 20)->nullable();
             $table->string('religion', 100)->nullable();

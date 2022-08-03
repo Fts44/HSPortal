@@ -22,7 +22,6 @@ function get_set_grade_level(input, gl_id){
         success: function (response) {
 
             let grade_level = JSON.parse(response); //parse to json
-            console.log(grade_level);
             clear_select(input, '--- Choose Grade level ---'); //clear select
 
             for (var level of grade_level)  //append result
@@ -40,28 +39,32 @@ function get_set_grade_level(input, gl_id){
     });
 }
 
-function get_set_department(input, dept, grade_level, dept_id){
+function get_set_department(input, dept_id, gl_id, prog_input){
+
+    clear_select(input, 'Choose Department'); //clear select
+    $(input).append($('<option>', {
+        value: null,
+        text: 'N/A'
+    }));
+    
+    clear_select(prog_input, 'Choose Program');
+    $(prog_input).append($('<option>', {
+        value: null,
+        text: 'N/A'
+    }));
 
     $.ajax({
-        url: window.location.origin+"/populate/department/"+grade_level,
+        url: window.location.origin+"/populate/department/"+gl_id,
         type: "GET",
         success: function (response) {
 
             let departments = JSON.parse(response); //parse to json
-            
-            clear_select(input, '--- Choose Department ---'); //clear select
-            $(input).append($('<option>', {
-                value: null,
-                text: 'N/A'
-            }));
 
-            console.log(departments);
             for (var department of departments)  //append result
             {
-                console.log(department.id);
                 $(input).append($('<option>', {
                     value: department.dept_id,
-                    text: department.dept_name,
+                    text: department.dept_code,
                     selected: (department.dept_id==dept_id) ? true : false
                 }));
             }
@@ -72,28 +75,27 @@ function get_set_department(input, dept, grade_level, dept_id){
     });
 }
 
-function get_set_program(input, prog, dept, prog_id){
+function get_set_program(input, prog_id, dept_id, ){
+
+    clear_select(input, 'Choose Program'); //clear select
 
     $.ajax({
-        url: window.location.origin+"/populate/program/"+dept,
+        url: window.location.origin+"/populate/program/"+dept_id,
         type: "GET",
         success: function (response) {
 
             let programs = JSON.parse(response); //parse to json
-            
-            clear_select(input, '--- Choose Program ---'); //clear select
+
             $(input).append($('<option>', {
                 value: null,
                 text: 'N/A'
             }));
 
-            console.log(programs);
             for (var program of programs)  //append result
             {
-                console.log(program.prog_id);
                 $(input).append($('<option>', {
                     value: program.prog_id,
-                    text: program.prog_name,
+                    text: program.prog_code,
                     selected: (program.prog_id==prog_id) ? true : false
                 }));
             }
@@ -106,8 +108,9 @@ function get_set_program(input, prog, dept, prog_id){
 
 function get_set_province(input, prov){
 
+    clear_select(input, 'Choose Province'); //clear select
+
     prov = prov.split("@")[0];
-    console.log(prov);
 
     $.ajax({
         url: window.location.origin+"/populate/province/",
@@ -115,9 +118,6 @@ function get_set_province(input, prov){
         success: function (response) {
 
             let provinces = JSON.parse(response); //parse to json
-            
-            console.log(provinces);
-            clear_select(input, '--- Choose Province ---'); //clear select
 
             for (var province of provinces)  //append result
             {
@@ -134,18 +134,20 @@ function get_set_province(input, prov){
     });
 }
 
-function get_set_municipality(input, mun, prov){
+function get_set_municipality(input, mun, prov, brgy_input){
+
+    clear_select(input, 'Choose Municipality'); //clear select
+    clear_select(brgy_input, 'Choose Barangay');
 
     prov = prov.split("@")[0];
-    console.log(prov);
-
+    mun = mun.split("@")[0];
+    
     $.ajax({
         url: window.location.origin+"/populate/municipality/",
         type: "GET",
         success: function (response) {
 
             let municipalities = JSON.parse(response); //parse to json
-            clear_select(input, '--- Choose Municipality ---'); //clear select
 
             for (var municipality of municipalities)  //append result
             {
@@ -165,8 +167,11 @@ function get_set_municipality(input, mun, prov){
 }
 
 function get_set_barangay(input, brgy, mun){
+
+    clear_select(input, 'Choose Barangay'); //clear select
+
+    brgy = brgy.split("@")[0];
     mun = mun.split("@")[0];
-    console.log(mun);
 
     $.ajax({
         url: window.location.origin+"/populate/barangay/",
@@ -174,8 +179,7 @@ function get_set_barangay(input, brgy, mun){
         success: function (response) {
 
             let barangays = JSON.parse(response); //parse to json
-            clear_select(input, '--- Choose Municipality ---'); //clear select
-
+            
             for (var barangay of barangays)  //append result
             {
                 if(mun==barangay.citymunCode){

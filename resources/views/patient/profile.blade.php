@@ -61,7 +61,7 @@
                                         <div class="col-lg-6">
                                             <label class="col-lg-12 col-form-label" for="gsuite_email">Gsuite Email</label>
                                             <div class="col-lg-12 mt-1">
-                                                <input name="gsuite_email" id="gsuite_email" type="text" class="form-control" placeholder="abc@g.batstate-u.edu.ph" value="{{ $personal_info->gsuite_email }}" {{ ($personal_info->gsuite_email != null) ? 'disabled' : '' }}>
+                                                <input name="gsuite_email" id="gsuite_email" type="text" class="form-control" placeholder="abc@g.batstate-u.edu.ph" value="{{ $personal_info->gsuite_email }}" {{ ($personal_info->gsuite_email != null) ? 'readonly' : '' }}>
                                             </div>
                                             <span class="text-danger"></span>
                                         </div>
@@ -119,7 +119,7 @@
                                                     </div> 
                                                 </div>  
                                                 <div class="col-lg-2 mt-1">
-                                                    <input name="last_name" type="text" class="form-control" placeholder="Suffix" value="{{ $personal_info->suffix_name }}" >
+                                                    <input name="suffix_name" type="text" class="form-control" placeholder="Suffix" value="{{ $personal_info->suffix_name }}" >
                                                 </div>
                                             </div>
                                             
@@ -133,8 +133,8 @@
                                                 <div class="col-lg-12 mt-1 text-center">
                                                     <select class="form-select" name="gender" id="gender">
                                                         <option value="">Choose</option>
-                                                        <option value="male" {{ ($personal_info->gender=='male') ? selected : '' }} >Male</option>
-                                                        <option value="female" {{ ($personal_info->gender=='female') ? selected : '' }} >Female</option>
+                                                        <option value="male" {{ ($personal_info->gender=='male') ? 'selected' : '' }} >Male</option>
+                                                        <option value="female" {{ ($personal_info->gender=='female') ? 'selected' : '' }} >Female</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -144,10 +144,10 @@
                                             <div class="col-lg-12 mt-1">
                                                 <select class="form-select" name="civil_status" id="civil_status">
                                                     <option value="">Choose</option>
-                                                    <option value="single" {{ ($personal_info->civil_status=='single') ? selected : '' }} >Single</option>
-                                                    <option value="married" {{ ($personal_info->civil_status=='married') ? selected : '' }} >Married</option>
-                                                    <option value="widowed" {{ ($personal_info->civil_status=='widowed') ? selected : '' }} >Widowed</option>
-                                                    <option value="divorced" {{ ($personal_info->civil_status=='divorced') ? selected : '' }} >Divorced</option>
+                                                    <option value="single" {{ ($personal_info->civil_status=='single') ? 'selected' : '' }} >Single</option>
+                                                    <option value="married" {{ ($personal_info->civil_status=='married') ? 'selected' : '' }} >Married</option>
+                                                    <option value="widowed" {{ ($personal_info->civil_status=='widowed') ? 'selected' : '' }} >Widowed</option>
+                                                    <option value="divorced" {{ ($personal_info->civil_status=='divorced') ? 'selected' : '' }} >Divorced</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -180,13 +180,13 @@
                                         <div class="col-lg-4">
                                             <label class="col-lg-12 col-form-label" for="religion">Religion:</label>
                                             <div class="col-lg-12 mt-1">
-                                                <input type="text" class="form-control" name="religion" id="religion">
+                                                <input type="text" class="form-control" name="religion" id="religion" value="{{ $personal_info->religion }}">
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
-                                            <label class="col-lg-12 col-form-label" for="birbirthdateth_date">Birthdate:</label>
+                                            <label class="col-lg-12 col-form-label" for="birthdate">Birthdate:</label>
                                             <div class="col-lg-12 mt-1">
-                                                <input name="birthdate" id="birthdate" type="date" class="form-control">
+                                                <input name="birthdate" id="birthdate" type="date" class="form-control" value="{{ $personal_info->birthdate }}">
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
@@ -413,51 +413,62 @@
 
             @if($home_add)
                 get_set_province('#home_prov','{{ $home_add->province }}');
-                get_set_municipality('#home_mun','', '{{ $home_add->municipality }}');
-                get_set_barangay('#home_brgy','', '{{ $home_add->barangay }}');
+                get_set_municipality('#home_mun','{{ $home_add->municipality }}','{{ $home_add->province }}');
+                get_set_barangay('#home_brgy','{{ $home_add->barangay }}','{{ $home_add->municipality }}');
             @else
                 get_set_province('#home_prov','');
             @endif
 
             @if($birth_add)
                 get_set_province('#birth_prov','{{ $birth_add->province }}');
-                get_set_municipality('#birth_mun','', '{{ $birth_add->municipality }}');
-                get_set_barangay('#birth_brgy','', '{{ $birth_add->barangay }}');
+                get_set_municipality('#birth_mun','{{ $birth_add->municipality }}','{{ $birth_add->province }}');
+                get_set_barangay('#birth_brgy','{{ $birth_add->barangay }}','{{ $birth_add->municipality }}');
             @else
                 get_set_province('#birth_prov','');
             @endif
 
             @if($dorm_add)
                 get_set_province('#dorm_prov','{{ $dorm_add->province }}');
-                get_set_municipality('#dorm_mun','', '{{ $dorm_add->municipality }}');
-                get_set_barangay('#dorm_brgy','', '{{ $dorm_add->barangay }}');
+                get_set_municipality('#dorm_mun','{{ $dorm_add->municipality }}','{{ $dorm_add->province }}');
+                get_set_barangay('#dorm_brgy','{{ $dorm_add->barangay }}','{{ $dorm_add->municipality }}');
             @else
                 get_set_province('#dorm_prov','');
             @endif
 
            
             $('#home_prov').change(function(){
-                get_set_municipality('#home_mun','', $('#home_prov').val());
+                get_set_municipality('#home_mun','', $('#home_prov').val(), '#home_brgy');
             });
             $('#home_mun').change(function(){
                 get_set_barangay('#home_brgy','', $('#home_mun').val());
             });
 
             $('#birth_prov').change(function(){
-                get_set_municipality('#birth_mun','', $('#birth_prov').val());
+                get_set_municipality('#birth_mun','', $('#birth_prov').val(), '#birth_brgy');
+                get_set_barangay('#birth_brgy','', $('#birth_mun').val());
             });
             $('#birth_mun').change(function(){
                 get_set_barangay('#birth_brgy','', $('#birth_mun').val());
             });
 
             $('#dorm_prov').change(function(){
-                get_set_municipality('#dorm_mun','', $('#dorm_prov').val());
+                get_set_municipality('#dorm_mun','', $('#dorm_prov').val(), '#dorm_brgy');
+                get_set_barangay('#dorm_brgy','', $('#dorm_mun').val());
             });
             $('#dorm_mun').change(function(){
                 get_set_barangay('#dorm_brgy','', $('#dorm_mun').val());
             });
 
             get_set_grade_level('#grade_level', "{{ $personal_info->gl_id }}");
+            get_set_department('#department', "{{ $personal_info->dept_id }}", "{{ $personal_info->gl_id }}");
+            get_set_program('#program', "{{ $personal_info->prog_id }}", "{{ $personal_info->dept_id }}");
+
+            $('#grade_level').change(function(){
+                get_set_department('#department', "", $('#grade_level').val(), '#program');
+            });
+            $('#department').change(function(){
+                get_set_program('#program', "", $('#department').val());
+            })
         });
     </script>
 @endpush
