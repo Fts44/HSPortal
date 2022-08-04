@@ -157,6 +157,7 @@
                         "_token": "{{csrf_token()}}",
                     }),
                     success: function(response){
+                        response = JSON.parse(response);
                         console.log(response);
                         $('.lbl_loading').addClass('d-none');
                         $('#btn_otp_lbl').removeClass('d-none');

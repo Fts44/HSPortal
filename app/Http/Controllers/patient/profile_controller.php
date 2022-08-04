@@ -3,13 +3,89 @@
 namespace App\Http\Controllers\patient;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\otp_controller;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
 use Session;
+use Storage;
+
+use App\Rules\pass_rule;
 
 class profile_controller extends Controller
 {
+    public function get_otp(Request $request){
+        $this->otp_controller = new otp_controller;
+
+        $otp_request = new Request([
+            'email' => $request->email,
+            'msg_type' => $request->msg_type
+        ]);
+
+        $result = $this->otp_controller->compose_email($otp_request);
+
+        echo json_encode($result);
+    }
+
+    public function update_password(Request $request, $id){
+        //echo json_encode($request->all());
+        Session()->put('active_page', 'password');
+        $rules = [
+            'new_pass' => ['required', 'max:20', new pass_rule],
+            'confirm_pass' => ['required','same:new_pass'],
+            'old_pass' => 'required'
+        ];
+
+        $message = [
+            'new_pass.required' => 'New password is required',
+            'confirm_pass.required' => 'Confirm password is required',
+            'confirm_pass.same' => 'Password not match',
+            'old_pass.required' => 'Old password is required'
+        ];
+
+        $validator = validator::make($request->all(), $rules, $message);
+
+        if($validator->fails()){
+            $response = [
+                'title' => 'Failed!',
+                'message' => 'Password not updated.',
+                'icon' => 'error',
+                'status' => 400
+            ];
+        }
+        else{
+            $old_pass = DB::table('accounts')->where('id', $id)->first()->password;
+
+            if(Hash::check($request->old_pass, $old_pass)){
+                DB::table('accounts')->where('id',$id)->update([
+                    'password' => Hash::make($request->new_pass)
+                ]);
+                $response = [
+                    'title' => 'Success!',
+                    'message' => 'Password updated.',
+                    'icon' => 'success',
+                    'status' => 200
+                ];
+                $response = json_encode($response);
+                return redirect()->back()->with('status',$response);
+            }
+            else{
+                $response = [
+                    'title' => 'Failed!',
+                    'message' => 'Wrong old password.',
+                    'icon' => 'error',
+                    'status' => 400
+                ];  
+            }
+
+        }
+        $response = json_encode($response, true);
+        return redirect()->back()->with('status',$response)->withErrors($validator)->withInput($request->all());
+    }
+
     public function update_emergency_contact(Request $request, $id){
         Session()->put('active_page', 'emergency_contact');
         $rules = [
@@ -155,10 +231,29 @@ class profile_controller extends Controller
             return redirect()->back()->with('status',$response)->withErrors($validator)->withInput($request->all());
         }
         else{
+            
             try{
                 DB::transaction(function () use($request, $id) {
                     // 'dorm_address_id'
                     $user_details = DB::table('accounts')->where('id', $id)->first();
+
+                    if($request->profile_pic!=null){
+                        $path = '/public/profile_pictures/';
+                        $file = $request->file('profile_pic');
+                        $file_name = time().'_profile_pic'.$id.'.'.$file->extension();
+        
+                        $upload = $file->storeAs($path, $file_name);
+
+                        DB::table('accounts')->where('id', $id)->update([
+                            'profile_pic' => $file_name
+                        ]);
+
+                        if($user_details->profile_pic){
+                            Storage::delete('/public/profile_pictures/'.$user_details->profile_pic);
+                        }
+                    }
+
+                    
 
                     if($user_details->home_address_id!=NULL){
                         DB::table('address')->where('id', $user_details->home_address_id)
@@ -223,6 +318,7 @@ class profile_controller extends Controller
                         'gsuite_email' => $request->gsuite_email,
                         'email' => $request->email,
                         'contact' => $request->contact,
+                        'sr_code' => $request->sr_code,
                         'first_name' => $request->first_name,
                         'middle_name' => $request->middle_name,
                         'last_name' => $request->last_name,
@@ -291,6 +387,31 @@ class profile_controller extends Controller
                 'contact' => ''
             ];
         }
+
+        if($dorm_add==null){
+            $dorm_add = (object)[
+                'province' => '',
+                'municipality' => '',
+                'barangay' => ''
+            ];
+        }
+
+        if($home_add==null){
+            $home_add = (object)[
+                'province' => '',
+                'municipality' => '',
+                'barangay' => ''
+            ];
+        }
+
+        if($birth_add==null){
+            $birth_add = (object)[
+                'province' => '',
+                'municipality' => '',
+                'barangay' => ''
+            ];
+        }
+
         $emerg_biz_add = (object)$emerg_biz_add;
         $emerg_info = (object)$emerg_info;
         return view("patient.profile")->with(compact('personal_info', 'home_add', 'birth_add', 'dorm_add','emerg_info','emerg_biz_add'));

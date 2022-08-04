@@ -15,6 +15,8 @@ use App\Http\Controllers\admin\configuration\grade_level_controller as GradeLeve
 use App\Http\Controllers\admin\configuration\department_controller as Department;
 use App\Http\Controllers\admin\configuration\program_controller as Program;
 
+use App\Http\Controllers\admin\profilepatient as AdminPatient;
+
 Route::get('/logout', [Login::class, 'logout']);
 
 Route::get('noaccess', function(){
@@ -48,6 +50,8 @@ Route::middleware('auth_check')->group(function(){
             Route::get('/', [PatientProfile::class, 'index']);
             Route::post('/updatemyprofile/{id}', [PatientProfile::class, 'update_personal_info']);
             Route::post('/updatemyemergencycontact/{id}', [PatientProfile::class, 'update_emergency_contact']);
+            Route::post('/updatemypassword/{id}', [PatientProfile::class, 'update_password']);
+            Route::post('/updatemyprofile/send_otp', [PatientProfile::class, 'get_otp']);
         });
 
         Route::prefix('/documents')->group(function(){
@@ -82,7 +86,7 @@ Route::middleware('auth_check')->group(function(){
         });
 
         Route::prefix('/patient')->group(function(){
-            Route::view('/','admin.profilepatient');
+            Route::get('/',[AdminPatient::class,'index']);
 
             Route::prefix('/records')->group(function(){
                 Route::view('/','admin.records');

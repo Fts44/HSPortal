@@ -22,7 +22,7 @@ function get_set_grade_level(input, gl_id){
         success: function (response) {
 
             let grade_level = JSON.parse(response); //parse to json
-            clear_select(input, '--- Choose Grade level ---'); //clear select
+            clear_select(input, 'Choose Grade level'); //clear select
 
             for (var level of grade_level)  //append result
             {

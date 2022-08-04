@@ -59,10 +59,10 @@
                                     <div class="row mb-3">
                                         <label class="col-lg-12 col-form-label d-flex justify-content-center" for="profile_pic">Profile Picture</label>
                                         <div class="col-lg-12 mt-1 d-flex justify-content-center">
-                                            <img class="form-control p-2" src="{{ asset('images/cat.jpg') }}" alt="test" style="height: 200px; width: 200px;">
+                                            <img class="form-control p-2" src="{{ ($personal_info->profile_pic) ? asset('storage/profile_pictures/'.$personal_info->profile_pic) : asset('storage/profile_pictures/default.png') }}" alt="Upload image" style="height: 200px; width: 200px;">
                                         </div>
                                         <div class="col-lg-12 mt-3 d-flex justify-content-center">
-                                            <input class="w-50 form-control" type="file" name="" id="" accept=".jpg,.png">
+                                            <input class="w-50 form-control" type="file" name="profile_pic" id="profile_pic" accept=".jpg,.png">
                                         </div>
                                     </div>
 
@@ -93,7 +93,10 @@
                                                             </span>
                                                         </div>
                                                         <div class="col-lg-4 mt-1">
-                                                            <a class="btn btn-secondary" style="width: 100%;">Get OTP</a>
+                                                            <a class="btn btn-secondary" style="width: 100%;" id="btn_otp">
+                                                                <span class="spinner-border spinner-border-sm d-none" id="lbl_loading" role="status" aria-hidden="true"></span>
+                                                                <span id="lbl_otp"> Get otp</span>
+                                                            </a>
                                                         </div>
                                                     </div>
                                                     
@@ -505,30 +508,53 @@
                             <!-- emergency contact form -->
 
                             <!-- Change Password Form -->
-                            <div class="tab-pane fade p-3  {{($active_page=='passowrd')?'active show':''}}" id="profile-change-password">
+                            <div class="tab-pane fade p-3  {{($active_page=='password')?'active show':''}}" id="profile-change-password">
                                
-                                <form method="POST" action="">
-
+                                <form method="POST" action="{{ url('patient/updatemypassword/'.session()->get('user_id')) }}">
+                                    
                                     @csrf
 
                                     <div class="row mb-3">
                                         <label for="new_pass" class="col-lg-12 col-form-label">New Password</label>
                                         <div class="col-lg-5 mt-1">  
-                                            <input class="form-control" type="password" name="new_pass" id="new_pass">
+                                            <input class="form-control" type="password" name="new_pass" id="new_pass" value="{{ old('new_pass') }}">
+                                            <span class="text-danger">
+                                                @error('new_pass')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span>
                                         </div>
                                     </div>
 
                                     <div class="row mb-3">
                                         <label for="confirm_pass" class="col-lg-12 col-form-label">Confirm Password</label>
                                         <div class="col-lg-5 mt-1">  
-                                            <input class="form-control" type="password" name="confirm_pass" id="confirm_pass">
+                                            <input class="form-control" type="password" name="confirm_pass" id="confirm_pass" value="{{ old('confirm_pass') }}">
+                                            <span class="text-danger">
+                                                @error('confirm_pass')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span>
                                         </div>
                                     </div>
 
                                     <div class="row mb-3">
                                         <label for="old_pass" class="col-lg-12 col-form-label">Old Password</label>
                                         <div class="col-lg-5 mt-1">  
-                                            <input class="form-control" type="password" name="old_pass" id="old_pass">
+                                            <input class="form-control" type="password" name="old_pass" id="old_pass" value="{{ old('old_pass') }}">
+                                            <span class="text-danger">
+                                                @error('old_pass')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        
+                                        <div class="col-lg-5 mt-1">
+                                        <input class="showpassword" type="checkbox" name="showpassword" id="showpassword"> 
+                                        <label for="showpassword">Show password</label>
                                         </div>
                                     </div>
 
@@ -568,30 +594,23 @@
             @endif
 
             // ============================= personal information ===================================
-            @if($home_add)
-                get_set_province('#home_prov','{{ old("home_prov",$home_add->province) }}');
-                get_set_municipality('#home_mun','{{ old("home_mun",$home_add->municipality) }}','{{ old("home_prov",$home_add->province) }}');
-                get_set_barangay('#home_brgy','{{ old("home_brgy",$home_add->barangay) }}','{{ old("home_mun",$home_add->municipality) }}');
-            @else
-                get_set_province('#home_prov','');
-            @endif
-
-            @if($birth_add)
-                get_set_province('#birth_prov','{{ old("birth_prov",$birth_add->province) }}');
-                get_set_municipality('#birth_mun','{{ old("birth_mun",$birth_add->municipality) }}','{{ old("birth_prov",$birth_add->province) }}');
-                get_set_barangay('#birth_brgy','{{ old("birth_brgy",$birth_add->barangay) }}','{{ old("birth_mun",$birth_add->municipality) }}');
-            @else
-                get_set_province('#birth_prov','');
-            @endif
-
-            @if($dorm_add)
-                get_set_province('#dorm_prov','{{ old("dorm_prov",$dorm_add->province) }}');
-                get_set_municipality('#dorm_mun','{{ old("dorm_mun",$dorm_add->municipality) }}','{{ old("dorm_prov",$dorm_add->province) }}');
-                get_set_barangay('#dorm_brgy','{{ old("dorm_brgy",$dorm_add->barangay) }}','{{ old("dorm_mun",$dorm_add->municipality) }}');
-            @else
-                get_set_province('#dorm_prov','');
-            @endif
-
+            
+            get_set_province('#home_prov','{{ old("home_prov",$home_add->province) }}');
+            get_set_municipality('#home_mun','{{ old("home_mun",$home_add->municipality) }}','{{ old("home_prov",$home_add->province) }}');
+            get_set_barangay('#home_brgy','{{ old("home_brgy",$home_add->barangay) }}','{{ old("home_mun",$home_add->municipality) }}');
+        
+            get_set_province('#birth_prov','{{ old("birth_prov",$birth_add->province) }}');
+            get_set_municipality('#birth_mun','{{ old("birth_mun",$birth_add->municipality) }}','{{ old("birth_prov",$birth_add->province) }}');
+            get_set_barangay('#birth_brgy','{{ old("birth_brgy",$birth_add->barangay) }}','{{ old("birth_mun",$birth_add->municipality) }}');
+            
+            get_set_province('#dorm_prov','{{ old("dorm_prov",$dorm_add->province) }}');
+            get_set_municipality('#dorm_mun','{{ old("dorm_mun",$dorm_add->municipality) }}','{{ old("dorm_prov",$dorm_add->province) }}');
+            get_set_barangay('#dorm_brgy','{{ old("dorm_brgy",$dorm_add->barangay) }}','{{ old("dorm_mun",$dorm_add->municipality) }}');
+            
+            get_set_province('#emerg_prov','{{ old("emerg_prov",$emerg_biz_add->province) }}');
+            get_set_municipality('#emerg_mun','{{ old("emerg_mun",$emerg_biz_add->municipality) }}','{{ old("emerg_prov",$emerg_biz_add->province) }}');
+            get_set_barangay('#emerg_brgy','{{ old("emerg_brgy",$emerg_biz_add->barangay) }}','{{ old("emerg_mun",$emerg_biz_add->municipality) }}');
+            
            
             $('#home_prov').change(function(){
                 get_set_municipality('#home_mun','', $('#home_prov').val(), '#home_brgy');
@@ -631,14 +650,6 @@
 
             // ============================= emergency contact ===================================
 
-            @if($emerg_biz_add)
-                get_set_province('#emerg_prov','{{ old("emerg_prov",$emerg_biz_add->province) }}');
-                get_set_municipality('#emerg_mun','{{ old("emerg_mun",$emerg_biz_add->municipality) }}','{{ old("emerg_prov",$emerg_biz_add->province) }}');
-                get_set_barangay('#emerg_brgy','{{ old("emerg_brgy",$emerg_biz_add->barangay) }}','{{ old("emerg_mun",$emerg_biz_add->municipality) }}');
-            @else
-                get_set_province('#emerg_prov','');
-            @endif
-
             $('#emerg_prov').change(function(){
                 get_set_municipality('#emerg_mun','', $('#emerg_prov').val(), '#emerg_brgy');
                 get_set_barangay('#emerg_brgy','', $('#emerg_mun').val());
@@ -648,6 +659,53 @@
             });
 
              // ============================= emergency contact ===================================
+
+             $('.showpassword').click(function(){            
+                let input = $('#old_pass, #new_pass, #confirm_pass');
+                if(input.attr('type') === 'password'){
+                    input.attr('type','text');
+                }
+                else{
+                    input.attr('type','password');
+                }
+            });
+
+            // $('#btn_otp').click(function(e){
+            //     e.preventDefault();
+            //     let email = $('#email').val();
+
+            //     $('.lbl_loading').removeClass('d-none');
+            //     $('#btn_otp_lbl').addClass('d-none');
+
+            //     $.ajax({
+            //         type: "POST",
+            //         url: "{{ url('registration/send_otp') }}",
+            //         contentType: 'application/json',
+            //         data: JSON.stringify({
+            //             "email": email,
+            //             "msg_type": "register",
+            //             "_token": "{{csrf_token()}}",
+            //         }),
+            //         success: function(response){
+            //             console.log(response);
+            //             $('.lbl_loading').addClass('d-none');
+            //             $('#btn_otp_lbl').removeClass('d-none');
+
+            //             if(response.status == 400){
+            //                 $.each(response.errors, function(key, err_values){
+            //                     $('#'+key+'_error').html(err_values);
+            //                 });
+            //             }
+            //             else{
+            //                 $('.error-message').html('');
+            //                 swal(response.title, response.message, response.icon);
+            //             }
+            //         },
+            //         error: function(response){
+            //             console.log(response);
+            //         }
+            //     });
+            // });
         });
     </script>
 @endpush

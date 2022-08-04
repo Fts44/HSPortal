@@ -68,10 +68,10 @@ class otp_controller extends Controller
         $validator = Validator::make($request->all(), $rules, $message);
 
         if($validator->fails()){
-            return response()->json([
+            $response = [
                 'status' => 400,
                 'errors' => $validator->messages()
-            ]);
+            ];
         }
         else{
             $new_otp = $this->generate_new_otp($request->email);
@@ -91,24 +91,23 @@ class otp_controller extends Controller
             ]);
     
             if($this->mailer->send($send_request)){
-                return response()->json([
+                $response = [
                     'status' => 200,
                     'title' => 'OTP sent!',
                     'message' => 'Check your inbox or “spam” folder.',
                     'icon' => 'success'
-                ]);
+                ];
             }
             else{
-                return response()->json([
+                $response = [
                     'status' => 200,
                     'title' => 'OTP not sent!',
                     'message' => 'Something went wrong! Please try again later.',
                     'icon' => 'error'
-                ]);
+                ];
             }
-
-        }
-         
+        }      
+        echo json_encode($response);
     }
 
     public function verify_otp(Request $request){
