@@ -15,7 +15,7 @@ use App\Http\Controllers\admin\configuration\grade_level_controller as GradeLeve
 use App\Http\Controllers\admin\configuration\department_controller as Department;
 use App\Http\Controllers\admin\configuration\program_controller as Program;
 
-use App\Http\Controllers\admin\profilepatient as AdminPatient;
+use App\Http\Controllers\admin\admin_patient_controller as AdminPatient;
 
 Route::get('/logout', [Login::class, 'logout']);
 

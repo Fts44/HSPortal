@@ -25,45 +25,27 @@
                     <table id="datatable" class="table table-striped col-lg-12" style="width: 100%;">
                         <thead> 
                             <tr>
-                                <th scope="col">StudentID</th>
+                                <th scope="col" class="d-none">ID</th>
+                                <th scope="col">SRCode</th>
+                                <th scope="col">GradeLevel</th>
+                                <th scope="col">Department</th>
+                                <th scope="col">Program</th>
                                 <th scope="col">Name</th>
-                                <th scope="col">DepartmentProgram</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Action</th>
+                                <th scope="col">Contact</th>
                             </tr>
                         </thead>
                         <tbody style = "width: 100%;">
+                        @foreach($patients as $patient)
                             <tr>
-                                <td>19-78604</td>
-                                <td>Joseph E. Calma</td>
-                                <td>CICS-BSIT</td>
-                                <td>
-                                    <span class="badge bg-success rounded-pill"">Verified</span>
-                                </td>
-                                <td>
-                                    <a class="btn btn-primary btn-sm"><i class="bi bi-eye"></i></a>
-                                    <a class="btn btn-danger btn-sm"><i class="bi bi-eraser"></i></a>
-                                    <a class="btn btn-secondary btn-sm" href="{{ url('admin/patient/records') }}"><i class="bi bi-folder"></i></a>
-                                    <!-- <a class="btn btn-success btn-sm"><i class="bi bi-chat"></i></a> -->
-                                    
-                                    
-                                    <!-- <a class="btn btn-danger btn-sm"><i class="bi bi-x-lg"></i> Remove</a> -->
-                                </td>
+                                <td class="d-none">{{ $patient->id }}</td>
+                                <td>{{ $patient->sr_code }}</td>
+                                <td>{{ $patient->grade_level }}</td>
+                                <td>{{ $patient->department }}</td>
+                                <td>{{ $patient->program }}</td>
+                                <td>{{ ucwords($patient->first_name)." ".(($patient->middle_name)? ucwords($patient->middle_name)[0].'. ' : '' )." ".ucwords($patient->last_name)." ".ucwords($patient->suffix_name) }}</td>
+                                <td>{{ $patient->contact }}</td>
                             </tr>
-                            <tr>
-                                <td>19-31250</td>
-                                <td>Aeron P. Nepomuceno</td>
-                                <td>CICS-COE</td>
-                                <td>
-                                    <span class="badge bg-primary rounded-pill" style="width: 100px;">Not Verified</span>
-                                </td>
-                                <td>
-                                    <a class="btn btn-primary btn-sm"><i class="bi bi-eye"></i></a>
-                                    <a class="btn btn-danger btn-sm"><i class="bi bi-eraser"></i></a>
-                                    <a class="btn btn-secondary btn-sm" href="{{ url('admin/patient/records') }}"><i class="bi bi-folder"></i></a>
-                                    <!-- <a class="btn btn-danger btn-sm"><i class="bi bi-x-lg"></i> Remove</a> -->
-                                </td>
-                            </tr>
+                        @endforeach 
                         </tbody>
                     </table>
                 </div>
